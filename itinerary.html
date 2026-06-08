@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=375, initial-scale=1.0">
+<title>TravelBuddy · Itinerary</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500;1,9..144,600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #FAF7F2;
+  --orange: #C4622D;
+  --orange-light: #E8975A;
+  --amber: #E8A838;
+  --green: #5C8A6E;
+  --ink: #1A1A1A;
+  --ink-soft: #3D3530;
+  --muted: #8A8A8A;
+  --card-bg: #FFFFFF;
+  --border: #F0EDE8;
+  --radius: 16px;
+}
+
+html, body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  width: 375px;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+  color: var(--ink);
+}
+
+/* ── Background doodles ── */
+.bg-doodles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* ── Header ── */
+.header {
+  position: relative;
+  z-index: 20;
+  background: var(--bg);
+  padding: 50px 22px 16px;
+}
+
+.header-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.wordmark {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'Fraunces', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--orange);
+  margin-bottom: 10px;
+}
+.wm-dot {
+  width: 22px; height: 22px;
+  background: var(--orange);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.trip-info { flex: 1; }
+
+.trip-title {
+  font-family: 'Fraunces', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.4px;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.trip-meta {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.trip-meta-dot {
+  width: 3px; height: 3px;
+  border-radius: 50%;
+  background: #C9C0B6;
+}
+
+/* Avatar stack */
+.avatar-stack {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+.avatar {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--bg);
+  margin-left: -8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 600;
+  color: #fff;
+  flex-shrink: 0;
+}
+.avatar:first-child { margin-left: 0; }
+.avatar-count {
+  margin-left: -4px;
+  height: 28px;
+  padding: 0 8px;
+  border-radius: 99px;
+  background: #EDE8E0;
+  border: 2px solid var(--bg);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+}
+
+/* Day pill strip */
+.day-strip {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+.day-strip::-webkit-scrollbar { display: none; }
+.day-pill {
+  flex-shrink: 0;
+  padding: 6px 14px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+  border: 1.5px solid transparent;
+}
+.day-pill.active {
+  background: var(--orange);
+  color: #fff;
+}
+.day-pill:not(.active) {
+  background: transparent;
+  border-color: #DDD6CE;
+  color: var(--muted);
+}
+
+/* ── Scrollable body ── */
+.scroll-body {
+  position: relative;
+  z-index: 10;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 10px 0 100px;
+  scrollbar-width: none;
+  height: calc(100vh - 178px);
+}
+.scroll-body::-webkit-scrollbar { display: none; }
+
+/* ── Timeline ── */
+.timeline {
+  position: relative;
+  padding: 0 20px 0 52px;
+}
+
+/* Dashed vertical line */
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 26px;
+  top: 10px;
+  bottom: 0;
+  width: 2px;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--amber) 0px,
+    var(--amber) 6px,
+    transparent 6px,
+    transparent 13px
+  );
+  border-radius: 1px;
+}
+
+/* ── Stop wrapper ── */
+.stop {
+  position: relative;
+  margin-bottom: 22px;
+}
+
+/* Node on the line */
+.stop-node {
+  position: absolute;
+  left: -34px;
+  top: 14px;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--amber);
+  border: 2.5px solid var(--bg);
+  box-shadow: 0 0 0 2px var(--amber);
+  z-index: 2;
+}
+.stop-node.done {
+  background: var(--orange);
+  box-shadow: 0 0 0 2px var(--orange);
+}
+
+/* Time pill */
+.time-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #FEF3DC;
+  color: #A06B10;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 99px;
+  margin-bottom: 8px;
+  letter-spacing: 0.2px;
+}
+
+/* ── Stop card ── */
+.stop-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.055), 0 0 0 1px rgba(0,0,0,0.04);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  cursor: pointer;
+}
+.stop-card:active {
+  transform: scale(0.985);
+  box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+}
+
+/* Card image band */
+.card-img {
+  width: 100%;
+  height: 88px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.card-img svg {
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%; height: 100%;
+}
+
+/* Stop 1 — sand → terracotta */
+.img-alfama {
+  background: linear-gradient(120deg, #E8C99A 0%, #D4895A 45%, #B85C35 75%, #8B3A2A 100%);
+}
+/* Stop 2 — olive → cream */
+.img-market {
+  background: linear-gradient(120deg, #C5C48A 0%, #D4C87A 35%, #E8D9A0 65%, #F5EDD0 100%);
+}
+/* Stop 3 — teal → navy */
+.img-rooftop {
+  background: linear-gradient(120deg, #2E7A7A 0%, #1E5A72 40%, #162844 75%, #0D1A2E 100%);
+}
+
+/* Card body */
+.card-body {
+  padding: 13px 14px 14px;
+}
+
+.card-header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 7px;
+}
+
+.card-title {
+  font-family: 'Fraunces', serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.2px;
+  line-height: 1.2;
+  flex: 1;
+}
+
+.status-pill {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 9px;
+  border-radius: 99px;
+  white-space: nowrap;
+  margin-top: 1px;
+}
+.status-booked {
+  background: #EDF5F0;
+  color: var(--green);
+}
+.status-cta {
+  background: var(--orange);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.status-cta:hover { background: #B05225; }
+
+/* Tag row */
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.tag {
+  font-size: 11px;
+  color: #7A6E64;
+  font-weight: 500;
+  background: #F5F1EB;
+  padding: 3px 9px;
+  border-radius: 99px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* Card description */
+.card-desc {
+  font-size: 12.5px;
+  color: #8A8A8A;
+  line-height: 1.5;
+}
+
+/* Connector tick between stops */
+.connector {
+  position: absolute;
+  left: -27px;
+  top: 50%;
+  width: 8px;
+  height: 1px;
+  background: var(--amber);
+  opacity: 0.4;
+}
+
+/* ── Cropped stop 3 ── */
+.stop.cropped {
+  margin-bottom: 0;
+}
+.stop.cropped .stop-card {
+  /* Clip so only ~65% shows */
+  max-height: 130px;
+  overflow: hidden;
+  position: relative;
+}
+.stop.cropped .stop-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 50px;
+  background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.95));
+  pointer-events: none;
+}
+
+/* ── Scroll fade at bottom of scroll area ── */
+.scroll-fade {
+  position: fixed;
+  bottom: 64px;
+  left: 0; right: 0;
+  height: 70px;
+  background: linear-gradient(to bottom, transparent, var(--bg));
+  pointer-events: none;
+  z-index: 15;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 10px;
+}
+.scroll-more {
+  font-size: 12.5px;
+  color: var(--muted);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  animation: bob 2s ease-in-out infinite;
+}
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(3px); }
+}
+
+/* ── Floating bottom bar ── */
+.bottom-bar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 72px;
+  background: rgba(250, 247, 242, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  z-index: 30;
+  gap: 10px;
+}
+
+.btn-ghost {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  background: transparent;
+  border: 1.5px solid #DDD6CE;
+  padding: 10px 16px;
+  border-radius: 99px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+.btn-ghost:hover {
+  border-color: #B0A898;
+  color: var(--ink-soft);
+}
+
+.btn-primary {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--orange);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 99px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, transform 0.12s;
+  flex-shrink: 0;
+  box-shadow: 0 3px 12px rgba(196,98,45,0.28);
+}
+.btn-primary:hover { background: #B05225; }
+.btn-primary:active { transform: scale(0.96); }
+</style>
+</head>
+<body>
+
+<!-- Background doodles -->
+<div class="bg-doodles">
+  <svg width="375" height="812" viewBox="0 0 375 812" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Wandering path suggestion top right -->
+    <path d="M310 60 Q330 80 320 105 Q310 130 330 150" stroke="#C4622D" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-dasharray="4 7" opacity="0.1"/>
+    <!-- Star crosses -->
+    <g opacity="0.13" stroke="#C4622D" stroke-width="1.4" stroke-linecap="round">
+      <line x1="356" y1="120" x2="356" y2="128"/><line x1="352" y1="124" x2="360" y2="124"/>
+      <line x1="353.5" y1="121.5" x2="358.5" y2="126.5"/><line x1="358.5" y1="121.5" x2="353.5" y2="126.5"/>
+    </g>
+    <g opacity="0.09" stroke="#E8A838" stroke-width="1.2" stroke-linecap="round">
+      <line x1="18" y1="480" x2="18" y2="486"/><line x1="15" y1="483" x2="21" y2="483"/>
+    </g>
+    <!-- Small compass bottom right -->
+    <g opacity="0.09" stroke="#C4622D" stroke-width="1.2" stroke-linecap="round" transform="translate(330, 760)">
+      <circle cx="16" cy="16" r="13" fill="none"/>
+      <line x1="16" y1="3" x2="16" y2="29"/>
+      <line x1="3" y1="16" x2="29" y2="16"/>
+    </g>
+    <!-- Leaf -->
+    <g opacity="0.12" stroke="#5C8A6E" stroke-width="1.3" fill="none" stroke-linecap="round">
+      <path d="M355 420 Q348 408 358 404 Q368 400 366 412 Q364 424 355 420Z"/>
+      <line x1="355" y1="420" x2="362" y2="408"/>
+    </g>
+    <!-- Dots -->
+    <circle cx="362" cy="340" r="2" fill="#C4622D" opacity="0.1"/>
+    <circle cx="354" cy="355" r="1.4" fill="#C4622D" opacity="0.07"/>
+    <circle cx="12" cy="620" r="2.2" fill="#E8A838" opacity="0.12"/>
+    <!-- Tiny plane -->
+    <g opacity="0.1" fill="none" stroke="#C4622D" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" transform="translate(14,52) rotate(-20)">
+      <path d="M0 8 L22 3 L26 7 L13 10 L14 17 L9 15 L8 19 L5 15 L0 8Z"/>
+    </g>
+  </svg>
+</div>
+
+<!-- ── Header ── -->
+<div class="header">
+  <div class="header-top">
+    <div class="trip-info">
+      <div class="wordmark">
+        <div class="wm-dot">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M6 0.5C3.52 0.5 1.5 2.52 1.5 5C1.5 8.2 6 11.5 6 11.5C6 11.5 10.5 8.2 10.5 5C10.5 2.52 8.48 0.5 6 0.5Z" fill="white" opacity="0.92"/>
+            <circle cx="6" cy="5" r="1.8" fill="#C4622D"/>
+          </svg>
+        </div>
+        TravelBuddy
+      </div>
+      <div class="trip-title">Lisbon Hen Weekend 🥂</div>
+      <div class="trip-meta">
+        <span>Day 1 of 3</span>
+        <span class="trip-meta-dot"></span>
+        <span>5 stops</span>
+        <span class="trip-meta-dot"></span>
+        <span style="color:#C4622D; font-weight:500;">~€45pp</span>
+      </div>
+    </div>
+
+    <!-- Avatar stack -->
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;margin-top:26px;">
+      <div class="avatar-stack">
+        <div class="avatar" style="background:#D4895A;">L</div>
+        <div class="avatar" style="background:#4AACB0;">M</div>
+        <div class="avatar" style="background:#7B5EA7;">S</div>
+        <div class="avatar" style="background:#5C8A6E;">R</div>
+        <div class="avatar-count">+8</div>
+      </div>
+      <div style="font-size:10px;color:var(--muted);font-weight:500;">12 going</div>
+    </div>
+  </div>
+
+  <!-- Day selector -->
+  <div class="day-strip">
+    <div class="day-pill active">Fri · Day 1</div>
+    <div class="day-pill">Sat · Day 2</div>
+    <div class="day-pill">Sun · Day 3</div>
+  </div>
+</div>
+
+<!-- ── Scrollable timeline ── -->
+<div class="scroll-body" id="scrollBody">
+  <div class="timeline">
+
+    <!-- ── STOP 1 ── -->
+    <div class="stop">
+      <div class="stop-node done"></div>
+      <div class="time-pill">
+        <svg width="9" height="9" viewBox="0 0 9 9" fill="none"><circle cx="4.5" cy="4.5" r="3.8" stroke="#A06B10" stroke-width="1.2"/><line x1="4.5" y1="2.2" x2="4.5" y2="4.8" stroke="#A06B10" stroke-width="1.2" stroke-linecap="round"/><line x1="4.5" y1="4.8" x2="6.2" y2="5.8" stroke="#A06B10" stroke-width="1.2" stroke-linecap="round"/></svg>
+        10:00 AM
+      </div>
+      <div class="stop-card">
+        <!-- Image -->
+        <div class="card-img img-alfama">
+          <svg viewBox="0 0 323 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Grain overlay -->
+            <rect width="323" height="88" fill="url(#grain1)" opacity="0.12"/>
+            <!-- Arch/dome landmark silhouette -->
+            <g fill="rgba(255,255,255,0.14)" stroke="none">
+              <!-- Central dome structure -->
+              <rect x="130" y="40" width="62" height="48"/>
+              <ellipse cx="161" cy="40" rx="31" ry="28"/>
+              <rect x="148" y="16" width="26" height="30"/>
+              <ellipse cx="161" cy="16" rx="13" ry="11"/>
+              <!-- Cross on top -->
+              <rect x="159" y="4" width="4" height="14"/>
+              <rect x="154" y="9" width="14" height="3"/>
+              <!-- Side towers -->
+              <rect x="90" y="52" width="20" height="36"/>
+              <rect x="95" y="44" width="10" height="12"/>
+              <ellipse cx="100" cy="44" rx="5" ry="8"/>
+              <rect x="213" y="52" width="20" height="36"/>
+              <rect x="218" y="44" width="10" height="12"/>
+              <ellipse cx="223" cy="44" rx="5" ry="8"/>
+              <!-- Small houses either side -->
+              <rect x="30" y="62" width="16" height="26"/>
+              <polygon points="30,62 46,62 38,52"/>
+              <rect x="50" y="65" width="14" height="23"/>
+              <polygon points="50,65 64,65 57,56"/>
+              <rect x="245" y="60" width="16" height="28"/>
+              <polygon points="245,60 261,60 253,50"/>
+              <rect x="264" y="64" width="14" height="24"/>
+              <polygon points="264,64 278,64 271,55"/>
+              <!-- Arched windows -->
+              <ellipse cx="161" cy="60" rx="8" ry="10" fill="rgba(0,0,0,0.18)"/>
+              <rect x="153" y="60" width="16" height="10" fill="rgba(0,0,0,0.18)"/>
+            </g>
+            <!-- Warm sun glow -->
+            <circle cx="265" cy="22" r="18" fill="rgba(255,220,150,0.22)"/>
+            <circle cx="265" cy="22" r="10" fill="rgba(255,200,100,0.18)"/>
+            <!-- Wavy hills -->
+            <path d="M0 68 Q40 58 80 65 Q120 72 160 64 Q200 56 240 66 Q280 76 323 68 L323 88 L0 88Z" fill="rgba(0,0,0,0.12)"/>
+            <defs>
+              <filter id="grain1"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/><feBlend in="SourceGraphic" mode="multiply"/></filter>
+            </defs>
+          </svg>
+        </div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-title">Alfama Walking Tour</div>
+            <div class="status-pill status-booked">Booked ✓</div>
+          </div>
+          <div class="tag-row">
+            <div class="tag">🗺️ Culture</div>
+            <div class="tag">⏱ 2 hrs</div>
+            <div class="tag">💶 Free</div>
+          </div>
+          <div class="card-desc">Narrow cobbled streets, viewpoints, and fado history</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STOP 2 ── -->
+    <div class="stop">
+      <div class="stop-node"></div>
+      <div class="time-pill">
+        <svg width="9" height="9" viewBox="0 0 9 9" fill="none"><circle cx="4.5" cy="4.5" r="3.8" stroke="#A06B10" stroke-width="1.2"/><line x1="4.5" y1="2.2" x2="4.5" y2="4.8" stroke="#A06B10" stroke-width="1.2" stroke-linecap="round"/><line x1="4.5" y1="4.8" x2="6.2" y2="5.8" stroke="#A06B10" stroke-width="1.2" stroke-linecap="round"/></svg>
+        12:30 PM
+      </div>
+      <div class="stop-card">
+        <div class="card-img img-market">
+          <svg viewBox="0 0 323 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Market hall silhouette -->
+            <g fill="rgba(100,80,20,0.2)" stroke="none">
+              <!-- Main hall arch -->
+              <rect x="60" y="32" width="202" height="56"/>
+              <ellipse cx="161" cy="32" rx="101" ry="26"/>
+              <!-- Internal arch rows -->
+              <ellipse cx="101" cy="55" rx="22" ry="18" fill="rgba(255,255,255,0.1)"/>
+              <rect x="79" y="55" width="44" height="33" fill="rgba(255,255,255,0.1)"/>
+              <ellipse cx="161" cy="50" rx="28" ry="22" fill="rgba(255,255,255,0.1)"/>
+              <rect x="133" y="50" width="56" height="38" fill="rgba(255,255,255,0.1)"/>
+              <ellipse cx="221" cy="55" rx="22" ry="18" fill="rgba(255,255,255,0.1)"/>
+              <rect x="199" y="55" width="44" height="33" fill="rgba(255,255,255,0.1)"/>
+              <!-- Roofline details -->
+              <rect x="58" y="22" width="6" height="16"/>
+              <rect x="259" y="22" width="6" height="16"/>
+              <rect x="155" y="10" width="12" height="24"/>
+            </g>
+            <!-- Market awning colours -->
+            <path d="M0 70 L28 58 L56 70Z" fill="rgba(180,50,30,0.25)"/>
+            <path d="M52 72 L80 60 L108 72Z" fill="rgba(60,110,80,0.25)"/>
+            <path d="M215 72 L243 60 L271 72Z" fill="rgba(180,50,30,0.25)"/>
+            <path d="M267 70 L295 58 L323 70Z" fill="rgba(60,110,80,0.25)"/>
+            <!-- Warm light blobs -->
+            <circle cx="90" cy="28" r="14" fill="rgba(255,220,120,0.2)"/>
+            <circle cx="250" cy="25" r="10" fill="rgba(255,200,80,0.18)"/>
+            <!-- Ground shadow -->
+            <path d="M0 76 Q80 70 161 73 Q242 76 323 72 L323 88 L0 88Z" fill="rgba(0,0,0,0.1)"/>
+          </svg>
+        </div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-title">Time Out Market</div>
+            <div class="status-pill status-cta">Reserve →</div>
+          </div>
+          <div class="tag-row">
+            <div class="tag">🍽️ Lunch</div>
+            <div class="tag">⏱ 1.5 hrs</div>
+            <div class="tag">💶 ~€15pp</div>
+          </div>
+          <div class="card-desc">25 chefs, one space — voted Europe's best market</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STOP 3 (cropped) ── -->
+    <div class="stop cropped">
+      <div class="stop-node"></div>
+      <div class="time-pill">
+        <svg width="9" height="9" viewBox="0 0 9 9" fill="none"><circle cx="4.5" cy="4.5" r="3.8" stroke="#A06B10" stroke-width="1.2"/><line x1="4.5" y1="2.2" x2="4.5" y2="4.8" stroke="#A06B10" stroke-width="1.2" stroke-linecap="round"/><line x1="4.5" y1="4.8" x2="6.2" y2="5.8" stroke="#A06B10" stroke-width="1.2" stroke-linecap="round"/></svg>
+        14:30 PM
+      </div>
+      <div class="stop-card">
+        <div class="card-img img-rooftop">
+          <svg viewBox="0 0 323 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- City skyline at dusk -->
+            <g fill="rgba(255,255,255,0.12)">
+              <rect x="20" y="48" width="16" height="40"/>
+              <rect x="23" y="38" width="10" height="14"/>
+              <rect x="40" y="55" width="20" height="33"/>
+              <rect x="44" y="44" width="12" height="16"/>
+              <rect x="64" y="42" width="12" height="46"/>
+              <rect x="66" y="28" width="8" height="18"/>
+              <rect x="67.5" y="18" width="5" height="13"/>
+              <rect x="80" y="50" width="22" height="38"/>
+              <rect x="84" y="38" width="14" height="18"/>
+              <rect x="106" y="45" width="14" height="43"/>
+              <rect x="109" y="32" width="8" height="17"/>
+              <rect x="124" y="52" width="18" height="36"/>
+              <rect x="146" y="40" width="16" height="48"/>
+              <rect x="149" y="26" width="10" height="18"/>
+              <rect x="151" y="14" width="6" height="15"/>
+              <rect x="166" y="48" width="20" height="40"/>
+              <rect x="170" y="36" width="12" height="18"/>
+              <rect x="190" y="42" width="14" height="46"/>
+              <rect x="193" y="30" width="8" height="16"/>
+              <rect x="208" y="50" width="18" height="38"/>
+              <rect x="230" y="44" width="12" height="44"/>
+              <rect x="232" y="30" width="8" height="18"/>
+              <rect x="246" y="55" width="22" height="33"/>
+              <rect x="272" y="48" width="16" height="40"/>
+              <rect x="292" y="52" width="20" height="36"/>
+            </g>
+            <!-- Moon -->
+            <circle cx="270" cy="22" r="16" fill="rgba(200,220,255,0.18)"/>
+            <circle cx="277" cy="18" r="11" fill="rgba(30,40,70,0.6)"/>
+            <!-- Stars -->
+            <g fill="rgba(255,255,255,0.6)">
+              <circle cx="40" cy="20" r="1.2"/>
+              <circle cx="120" cy="14" r="1"/>
+              <circle cx="200" cy="18" r="1.4"/>
+              <circle cx="80" cy="32" r="0.9"/>
+              <circle cx="170" cy="10" r="1.1"/>
+            </g>
+            <!-- Rooftop bar rail suggestion -->
+            <line x1="80" y1="36" x2="240" y2="36" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+            <!-- Ground glow -->
+            <path d="M0 72 Q80 66 161 70 Q242 74 323 68 L323 88 L0 88Z" fill="rgba(0,0,0,0.25)"/>
+          </svg>
+        </div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div class="card-title">Bairro Alto Rooftop Bar</div>
+          </div>
+          <div class="tag-row">
+            <div class="tag">🍹 Drinks</div>
+            <div class="tag">⏱ 2 hrs</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /timeline -->
+</div><!-- /scroll-body -->
+
+<!-- Scroll fade -->
+<div class="scroll-fade">
+  <div class="scroll-more">
+    2 more stops
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 2.5V9.5M6 9.5L3 7M6 9.5L9 7" stroke="#8A8A8A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+</div>
+
+<!-- Bottom bar -->
+<div class="bottom-bar">
+  <button class="btn-ghost" onclick="regenerate()">↩ Regenerate plan</button>
+  <button class="btn-primary" onclick="share()">Share with group →</button>
+</div>
+
+<script>
+// Day pills
+document.querySelectorAll('.day-pill').forEach(pill => {
+  pill.addEventListener('click', function() {
+    document.querySelectorAll('.day-pill').forEach(p => p.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+// Reserve CTA ripple feedback
+document.querySelector('.status-cta').addEventListener('click', function(e) {
+  e.stopPropagation();
+  this.textContent = 'Reserving…';
+  this.style.background = '#E8A838';
+  setTimeout(() => {
+    this.textContent = 'Reserved ✓';
+    this.style.background = '#5C8A6E';
+    this.classList.remove('status-cta');
+    this.classList.add('status-booked');
+    this.style.cssText = '';
+    this.textContent = 'Reserved ✓';
+  }, 1200);
+});
+
+function regenerate() {
+  const btn = document.querySelector('.btn-ghost');
+  btn.textContent = '↻ Regenerating…';
+  btn.style.color = '#C4622D';
+  btn.style.borderColor = '#C4622D';
+  setTimeout(() => {
+    btn.textContent = '↩ Regenerate plan';
+    btn.style.color = '';
+    btn.style.borderColor = '';
+  }, 1800);
+}
+
+function share() {
+  const btn = document.querySelector('.btn-primary');
+  const orig = btn.textContent;
+  btn.textContent = 'Link copied! 🔗';
+  btn.style.background = '#5C8A6E';
+  setTimeout(() => {
+    btn.textContent = orig;
+    btn.style.background = '';
+  }, 1800);
+}
+</script>
+</body>
+</html>

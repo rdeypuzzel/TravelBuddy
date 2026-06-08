@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=375, initial-scale=1.0">
+<title>TravelBuddy · Share</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:     #FAF7F2;
+  --orange: #C4622D;
+  --amber:  #E8A838;
+  --green:  #5C8A6E;
+  --ink:    #1A1A1A;
+  --muted:  #6B6B6B;
+  --border: #F0EDE8;
+  --chip:   #E8E0D8;
+}
+
+html, body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  width: 375px;
+  height: 100vh;
+  overflow: hidden;
+  color: var(--ink);
+}
+
+.page {
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  padding-bottom: 110px;
+}
+.page::-webkit-scrollbar { display: none; }
+
+/* ══════════════════════════════
+   SUCCESS HERO
+══════════════════════════════ */
+.success-hero {
+  width: 375px;
+  background: linear-gradient(180deg, #FDF1E7 0%, #FAF9F5 70%, var(--bg) 100%);
+  padding: 52px 24px 32px;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+/* Confetti dot/plus pattern */
+.confetti-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* ── Check circle ── */
+.check-circle {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: var(--green);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 0 0 10px rgba(92,138,110,0.10),
+    0 0 0 20px rgba(92,138,110,0.05);
+  animation: pop-in 0.55s cubic-bezier(.34,1.56,.64,1) both;
+  position: relative;
+  z-index: 2;
+}
+@keyframes pop-in {
+  0%   { transform: scale(0.3); opacity: 0; }
+  60%  { transform: scale(1.08); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.check-circle svg {
+  animation: draw-check 0.4s ease 0.4s both;
+  stroke-dasharray: 28;
+  stroke-dashoffset: 28;
+}
+@keyframes draw-check {
+  to { stroke-dashoffset: 0; }
+}
+
+.success-headline {
+  font-family: 'Fraunces', serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-top: 16px;
+  letter-spacing: -0.4px;
+  line-height: 1.2;
+  position: relative; z-index: 2;
+}
+
+.success-sub {
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: 6px;
+  font-weight: 400;
+  position: relative; z-index: 2;
+}
+
+/* ── Avatar row ── */
+.avatar-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-top: 20px;
+  position: relative; z-index: 2;
+}
+
+.av {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 2px solid #FDF1E7;
+  margin-left: -7px;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,0.9);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  animation: av-pop 0.4s cubic-bezier(.34,1.56,.64,1) both;
+}
+.av:first-child { margin-left: 0; }
+.av:nth-child(1) { background: #8DB89A; animation-delay: 0.55s; }
+.av:nth-child(2) { background: #D4A0A0; animation-delay: 0.62s; }
+.av:nth-child(3) { background: #C47A6A; animation-delay: 0.69s; }
+.av:nth-child(4) { background: #4AACB0; animation-delay: 0.76s; }
+.av:nth-child(5) { background: #7B5EA7; animation-delay: 0.83s; }
+.av:nth-child(6) { background: #D4C49A; animation-delay: 0.90s; color: rgba(80,60,30,0.8); }
+.av:nth-child(7) { background: #A0C4A8; animation-delay: 0.97s; }
+.av-overflow {
+  background: #FEF3DC;
+  color: #A06B10;
+  border-color: #FDF1E7;
+  font-size: 11px;
+  animation-delay: 1.04s;
+}
+
+@keyframes av-pop {
+  0%   { transform: scale(0) translateY(8px); opacity: 0; }
+  100% { transform: scale(1) translateY(0);   opacity: 1; }
+}
+
+.avatar-label {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 10px;
+  position: relative; z-index: 2;
+  animation: fade-up 0.5s ease 1.1s both;
+}
+@keyframes fade-up {
+  0%   { opacity: 0; transform: translateY(6px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ══════════════════════════════
+   SHARE LINK CARD
+══════════════════════════════ */
+.share-card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 2px 14px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04);
+  margin: 20px 20px 0;
+  padding: 18px 18px 22px;
+  animation: fade-up 0.5s ease 0.9s both;
+}
+
+.card-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.card-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #B0A898;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.active-pill {
+  background: #EDF5F0;
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 99px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.active-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.7); }
+}
+
+/* Link field */
+.link-field {
+  background: #F7F4F0;
+  border: 1.5px solid var(--chip);
+  border-radius: 12px;
+  padding: 13px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: border-color 0.15s ease;
+}
+.link-field:hover { border-color: #C9C0B6; }
+
+.link-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+  filter: none;
+}
+
+.link-text {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: 'DM Sans', monospace;
+}
+
+.copy-btn {
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--orange);
+  border: 1.5px solid var(--orange);
+  background: transparent;
+  padding: 5px 12px;
+  border-radius: 99px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s, transform 0.1s;
+}
+.copy-btn:hover { background: #FDF2EC; }
+.copy-btn:active { transform: scale(0.93); }
+.copy-btn.copied {
+  background: #EDF5F0;
+  border-color: var(--green);
+  color: var(--green);
+}
+
+.link-note {
+  font-size: 11.5px;
+  color: #A8A09A;
+  text-align: center;
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
+/* Share via row */
+.share-via-label {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 500;
+  margin: 18px 0 12px;
+}
+
+.share-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.share-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.share-icon-box {
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  transition: transform 0.18s cubic-bezier(.34,1.56,.64,1), box-shadow 0.15s ease;
+}
+.share-btn:hover .share-icon-box {
+  transform: translateY(-3px) scale(1.06);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+.share-btn:active .share-icon-box { transform: scale(0.93); }
+
+/* WhatsApp — primary, slightly larger */
+.share-btn.primary .share-icon-box {
+  width: 58px; height: 58px;
+  box-shadow: 0 4px 14px rgba(37,211,102,0.22);
+}
+
+.share-bg-wa    { background: #E8F8EE; }
+.share-bg-msg   { background: #E8F0FC; }
+.share-bg-email { background: #FEF7E8; }
+.share-bg-more  { background: #F3F0EB; }
+
+.share-label {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 500;
+  text-align: center;
+}
+
+/* ══════════════════════════════
+   PLAN PREVIEW STRIP
+══════════════════════════════ */
+.preview-section {
+  margin-top: 22px;
+  animation: fade-up 0.5s ease 1.0s both;
+}
+
+.preview-label {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 500;
+  margin: 0 0 12px 24px;
+}
+
+.preview-strip {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 4px 24px 6px;
+}
+.preview-strip::-webkit-scrollbar { display: none; }
+
+.preview-card {
+  flex-shrink: 0;
+  width: 140px;
+  height: 178px;
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 3px 14px rgba(0,0,0,0.09);
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(.34,1.56,.64,1), box-shadow 0.2s ease;
+}
+.preview-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.13);
+}
+
+.preview-card.day1 { background: linear-gradient(155deg, #8B3A2A 0%, #C4622D 45%, #D4895A 80%, #E8C99A 100%); }
+.preview-card.day2 { background: linear-gradient(155deg, #1A3A4A 0%, #2E6A7A 40%, #4AACB0 75%, #7ACCD0 100%); }
+.preview-card.day3 { background: linear-gradient(155deg, #3A4A1A 0%, #6A8A30 40%, #C4B84A 75%, #E8D870 100%); }
+
+/* Grain on preview cards */
+.preview-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  background-size: 140px;
+  mix-blend-mode: overlay;
+  opacity: 0.6;
+}
+
+.preview-content {
+  position: absolute;
+  inset: 0;
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.preview-emoji {
+  font-size: 20px;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.3));
+}
+
+.preview-bottom {}
+
+.preview-day {
+  font-family: 'Fraunces', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.1;
+  margin-bottom: 4px;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+.preview-stops {
+  font-size: 10.5px;
+  color: rgba(255,255,255,0.8);
+  line-height: 1.4;
+  font-weight: 400;
+}
+
+/* SVG illustration overlays on preview cards */
+.preview-svg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* ══════════════════════════════
+   BOTTOM BAR
+══════════════════════════════ */
+.bottom-bar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: rgba(250,247,242,0.96);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1.5px solid var(--border);
+  padding: 14px 22px 28px;
+  z-index: 50;
+}
+
+.btn-share {
+  width: 100%;
+  height: 54px;
+  background: var(--green);
+  color: #fff;
+  border: none;
+  border-radius: 99px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: -0.1px;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 4px 18px rgba(92,138,110,0.30),
+    inset 0 1px 0 rgba(255,255,255,0.18),
+    inset 0 -2px 0 rgba(0,0,0,0.1);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  animation: fade-up 0.5s ease 1.15s both;
+}
+.btn-share:hover { background: #4A6E58; }
+.btn-share:active { transform: scale(0.975); }
+.btn-share::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 55%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.13), transparent);
+  animation: shimmer 3.5s ease-in-out 1.5s infinite;
+}
+@keyframes shimmer {
+  0%   { left: -70%; }
+  55%, 100% { left: 140%; }
+}
+
+.btn-share-sub {
+  text-align: center;
+  font-size: 12px;
+  color: #A8A09A;
+  margin-top: 8px;
+}
+
+/* ══════════════════════════════
+   BURST CONFETTI
+══════════════════════════════ */
+.cp {
+  position: fixed;
+  pointer-events: none;
+  z-index: 999;
+  animation: cf 1.1s ease-in forwards;
+}
+@keyframes cf {
+  0%   { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
+  100% { opacity: 0; transform: translateY(150px) rotate(600deg) scale(0.1); }
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%) translateY(12px);
+  background: var(--ink);
+  color: #FAF7F2;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px 20px;
+  border-radius: 99px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  white-space: nowrap;
+  z-index: 100;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ══ SUCCESS HERO ══ -->
+  <div class="success-hero">
+
+    <!-- Confetti background pattern (SVG) -->
+    <div class="confetti-bg">
+      <svg width="375" height="260" viewBox="0 0 375 260" fill="none" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;width:100%;height:100%;">
+        <!-- Plus shapes -->
+        <g opacity="0.055">
+          <g fill="#C4622D">
+            <rect x="28" y="22" width="2" height="8" rx="1"/><rect x="24" y="26" width="10" height="2" rx="1"/>
+            <rect x="100" y="55" width="2" height="8" rx="1"/><rect x="96" y="59" width="10" height="2" rx="1"/>
+            <rect x="180" y="18" width="2" height="8" rx="1"/><rect x="176" y="22" width="10" height="2" rx="1"/>
+            <rect x="268" y="40" width="2" height="8" rx="1"/><rect x="264" y="44" width="10" height="2" rx="1"/>
+            <rect x="345" y="22" width="2" height="8" rx="1"/><rect x="341" y="26" width="10" height="2" rx="1"/>
+            <rect x="50" y="110" width="2" height="8" rx="1"/><rect x="46" y="114" width="10" height="2" rx="1"/>
+            <rect x="320" y="130" width="2" height="8" rx="1"/><rect x="316" y="134" width="10" height="2" rx="1"/>
+            <rect x="148" y="145" width="2" height="8" rx="1"/><rect x="144" y="149" width="10" height="2" rx="1"/>
+          </g>
+          <g fill="#E8A838">
+            <circle cx="65" cy="45" r="3"/>
+            <circle cx="140" cy="28" r="2.5"/>
+            <circle cx="228" cy="65" r="3"/>
+            <circle cx="310" cy="28" r="2"/>
+            <circle cx="360" cy="68" r="2.5"/>
+            <circle cx="16" cy="80" r="2"/>
+            <circle cx="80" cy="160" r="2.5"/>
+            <circle cx="200" cy="130" r="2"/>
+            <circle cx="360" cy="155" r="2.5"/>
+            <circle cx="130" cy="90" r="2"/>
+            <circle cx="280" cy="100" r="2.5"/>
+          </g>
+          <g fill="#5C8A6E">
+            <rect x="355" y="90" width="3" height="3" rx="0.8"/>
+            <rect x="12" y="135" width="3" height="3" rx="0.8"/>
+            <rect x="248" y="25" width="3" height="3" rx="0.8"/>
+            <rect x="172" y="165" width="3" height="3" rx="0.8"/>
+            <rect x="86" y="200" width="3" height="3" rx="0.8"/>
+          </g>
+        </g>
+        <!-- Tiny sparkle stars -->
+        <g opacity="0.07" stroke="#C4622D" stroke-width="1" stroke-linecap="round">
+          <line x1="340" y1="80" x2="340" y2="86"/><line x1="337" y1="83" x2="343" y2="83"/>
+          <line x1="337.8" y1="80.8" x2="342.2" y2="85.2"/><line x1="342.2" y1="80.8" x2="337.8" y2="85.2"/>
+        </g>
+        <g opacity="0.06" stroke="#E8A838" stroke-width="1" stroke-linecap="round">
+          <line x1="28" y1="165" x2="28" y2="171"/><line x1="25" y1="168" x2="31" y2="168"/>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Check mark -->
+    <div class="check-circle">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <polyline points="5,13 10,18 19,7" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <div class="success-headline">Your Lisbon plan is ready 🥂</div>
+    <div class="success-sub">8 people · 3 days · 12 stops</div>
+
+    <!-- Avatars -->
+    <div class="avatar-row">
+      <div class="av">S</div>
+      <div class="av">M</div>
+      <div class="av">J</div>
+      <div class="av">K</div>
+      <div class="av">R</div>
+      <div class="av" style="font-size:9px;color:rgba(70,50,20,0.8);">L</div>
+      <div class="av">T</div>
+      <div class="av av-overflow">+2</div>
+    </div>
+    <div class="avatar-label">Everyone's preferences included</div>
+
+  </div><!-- /success-hero -->
+
+  <!-- ══ SHARE LINK CARD ══ -->
+  <div class="share-card">
+    <div class="card-label-row">
+      <div class="card-label">Your group link</div>
+      <div class="active-pill">
+        <div class="active-dot"></div>
+        Active ✓
+      </div>
+    </div>
+
+    <!-- Link field -->
+    <div class="link-field">
+      <span class="link-icon" style="color:var(--orange);">🔗</span>
+      <span class="link-text">travelbuddy.io/g/lisbon-hens</span>
+      <button class="copy-btn" id="copyBtn" onclick="copyLink()">Copy</button>
+    </div>
+    <div class="link-note">Anyone with this link can view the plan<br>and submit their preferences</div>
+
+    <!-- Share via -->
+    <div class="share-via-label">Send via</div>
+    <div class="share-actions">
+
+      <div class="share-btn primary" onclick="shareAction('WhatsApp')">
+        <div class="share-icon-box share-bg-wa">
+          <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+            <circle cx="13" cy="13" r="13" fill="#25D366"/>
+            <path d="M13 5.5C8.86 5.5 5.5 8.86 5.5 13C5.5 14.38 5.88 15.66 6.54 16.76L5.5 20.5L9.34 19.48C10.4 20.08 11.66 20.42 13 20.42C17.14 20.42 20.5 17.06 20.5 13C20.5 8.86 17.14 5.5 13 5.5Z" fill="white" opacity="0.95"/>
+            <path d="M9.8 10.4C9.98 10.4 10.18 10.4 10.34 10.82L10.96 12.42C11.04 12.62 11 12.86 10.86 13.02L10.52 13.44C10.38 13.6 10.36 13.82 10.46 14L11.44 15.6C11.56 15.8 11.78 15.94 12.02 15.94L12.18 15.92C12.42 15.86 12.64 15.72 12.8 15.54L13.06 15.24C13.24 15.02 13.54 14.96 13.78 15.1L15.4 16.02C15.64 16.16 15.72 16.46 15.6 16.7C15.32 17.28 14.66 17.72 14.02 17.74C12.72 17.78 10.74 17.1 9.28 14.82C8.7 13.92 8.5 13.02 8.52 12.22C8.54 11.52 8.98 10.82 9.54 10.52C9.62 10.46 9.72 10.4 9.8 10.4Z" fill="#25D366"/>
+          </svg>
+        </div>
+        <span class="share-label">WhatsApp</span>
+      </div>
+
+      <div class="share-btn" onclick="shareAction('iMessage')">
+        <div class="share-icon-box share-bg-msg">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <rect width="24" height="24" rx="6" fill="#2196F3" opacity="0.85"/>
+            <path d="M4 8C4 6.9 4.9 6 6 6H18C19.1 6 20 6.9 20 8V14C20 15.1 19.1 16 18 16H8L4 20V8Z" fill="white" opacity="0.9"/>
+          </svg>
+        </div>
+        <span class="share-label">iMessage</span>
+      </div>
+
+      <div class="share-btn" onclick="shareAction('Email')">
+        <div class="share-icon-box share-bg-email">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <rect width="24" height="24" rx="6" fill="#E8A838" opacity="0.85"/>
+            <rect x="4" y="7" width="16" height="11" rx="2" fill="white" opacity="0.9"/>
+            <path d="M4 8.5L12 13.5L20 8.5" stroke="#E8A838" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="share-label">Email</span>
+      </div>
+
+      <div class="share-btn" onclick="shareAction('More')">
+        <div class="share-icon-box share-bg-more">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <rect width="24" height="24" rx="6" fill="#C9C0B6" opacity="0.5"/>
+            <circle cx="7" cy="12" r="1.5" fill="#6B6B6B"/>
+            <circle cx="12" cy="12" r="1.5" fill="#6B6B6B"/>
+            <circle cx="17" cy="12" r="1.5" fill="#6B6B6B"/>
+          </svg>
+        </div>
+        <span class="share-label">More</span>
+      </div>
+
+    </div>
+  </div><!-- /share-card -->
+
+  <!-- ══ PREVIEW STRIP ══ -->
+  <div class="preview-section">
+    <div class="preview-label">What they'll see</div>
+    <div class="preview-strip">
+
+      <!-- Day 1 -->
+      <div class="preview-card day1">
+        <svg class="preview-svg" viewBox="0 0 140 178" fill="none">
+          <!-- Skyline silhouette -->
+          <g fill="rgba(255,255,255,0.1)">
+            <rect x="8" y="90" width="10" height="88"/><rect x="10" y="78" width="6" height="16"/>
+            <rect x="22" y="98" width="12" height="80"/><rect x="24" y="84" width="8" height="18"/>
+            <rect x="38" y="86" width="8" height="92"/><rect x="39" y="70" width="6" height="20"/>
+            <rect x="50" y="92" width="14" height="86"/><rect x="53" y="76" width="8" height="20"/>
+            <rect x="68" y="88" width="10" height="90"/><rect x="69" y="72" width="8" height="20"/>
+            <rect x="82" y="96" width="12" height="82"/><rect x="84" y="80" width="8" height="20"/>
+            <rect x="98" y="90" width="10" height="88"/><rect x="100" y="74" width="6" height="20"/>
+            <rect x="112" y="94" width="16" height="84"/><rect x="115" y="78" width="10" height="20"/>
+            <rect x="132" y="88" width="10" height="90"/><rect x="134" y="72" width="6" height="18"/>
+          </g>
+          <!-- Sun glow -->
+          <circle cx="110" cy="50" r="22" fill="rgba(255,200,100,0.2)"/>
+          <circle cx="110" cy="50" r="12" fill="rgba(255,180,60,0.18)"/>
+        </svg>
+        <div class="preview-content">
+          <div class="preview-emoji">🗺️</div>
+          <div class="preview-bottom">
+            <div class="preview-day">Day 1</div>
+            <div class="preview-stops">5 stops · Alfama + lunch</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Day 2 -->
+      <div class="preview-card day2">
+        <svg class="preview-svg" viewBox="0 0 140 178" fill="none">
+          <!-- Night city + rooftop suggestion -->
+          <g fill="rgba(255,255,255,0.1)">
+            <rect x="6" y="95" width="10" height="83"/><rect x="7" y="80" width="8" height="18"/>
+            <rect x="20" y="88" width="14" height="90"/><rect x="22" y="72" width="10" height="20"/>
+            <rect x="38" y="82" width="10" height="96"/><rect x="39" y="64" width="8" height="22"/>
+            <rect x="52" y="90" width="16" height="88"/><rect x="55" y="74" width="10" height="20"/>
+            <rect x="72" y="85" width="12" height="93"/><rect x="74" y="68" width="8" height="20"/>
+            <rect x="88" y="92" width="10" height="86"/><rect x="89" y="76" width="8" height="18"/>
+            <rect x="102" y="86" width="14" height="92"/><rect x="104" y="70" width="10" height="20"/>
+            <rect x="120" y="90" width="12" height="88"/><rect x="122" y="74" width="8" height="18"/>
+          </g>
+          <!-- Moon -->
+          <circle cx="28" cy="36" r="16" fill="rgba(200,230,255,0.16)"/>
+          <circle cx="33" cy="32" r="11" fill="rgba(20,50,80,0.45)"/>
+          <!-- Stars -->
+          <g fill="rgba(255,255,255,0.55)">
+            <circle cx="70" cy="22" r="1.2"/><circle cx="100" cy="14" r="1"/><circle cx="120" cy="28" r="1.3"/><circle cx="55" cy="40" r="0.9"/>
+          </g>
+        </svg>
+        <div class="preview-content">
+          <div class="preview-emoji">🥂</div>
+          <div class="preview-bottom">
+            <div class="preview-day">Day 2</div>
+            <div class="preview-stops">Rooftop bar + Sintra trip</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Day 3 -->
+      <div class="preview-card day3">
+        <svg class="preview-svg" viewBox="0 0 140 178" fill="none">
+          <!-- Beach/coastal shapes -->
+          <ellipse cx="70" cy="130" rx="80" ry="28" fill="rgba(255,255,255,0.07)"/>
+          <!-- Waves -->
+          <path d="M0 115 Q18 108 35 115 Q52 122 70 115 Q88 108 105 115 Q122 122 140 115" stroke="rgba(255,255,255,0.18)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <path d="M0 128 Q18 121 35 128 Q52 135 70 128 Q88 121 105 128 Q122 135 140 128" stroke="rgba(255,255,255,0.12)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+          <!-- Palm silhouettes -->
+          <g fill="rgba(50,80,20,0.3)">
+            <rect x="18" y="78" width="3" height="50"/>
+            <path d="M19.5 78 Q8 60 2 52 Q14 56 20 66Z"/>
+            <path d="M19.5 78 Q32 58 38 50 Q26 56 20 66Z"/>
+            <path d="M19.5 78 Q4 72 0 66 Q10 68 18 74Z"/>
+          </g>
+          <g fill="rgba(50,80,20,0.25)">
+            <rect x="108" y="88" width="3" height="46"/>
+            <path d="M109.5 88 Q100 72 95 64 Q106 68 110 78Z"/>
+            <path d="M109.5 88 Q120 70 125 62 Q115 68 110 78Z"/>
+          </g>
+          <!-- Sun -->
+          <circle cx="100" cy="38" r="20" fill="rgba(255,220,100,0.22)"/>
+          <circle cx="100" cy="38" r="11" fill="rgba(255,200,60,0.2)"/>
+        </svg>
+        <div class="preview-content">
+          <div class="preview-emoji">🎉</div>
+          <div class="preview-bottom">
+            <div class="preview-day">Day 3</div>
+            <div class="preview-stops">Beach club + farewell dinner</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<!-- ══ BOTTOM BAR ══ -->
+<div class="bottom-bar">
+  <button class="btn-share" id="shareBtn" onclick="doShare()">
+    Share with the group →
+  </button>
+  <div class="btn-share-sub">They can view, comment, and book directly</div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ── Copy link ── */
+function copyLink() {
+  const btn = document.getElementById('copyBtn');
+  btn.textContent = 'Copied!';
+  btn.classList.add('copied');
+  showToast('Link copied to clipboard 🔗');
+  setTimeout(() => {
+    btn.textContent = 'Copy';
+    btn.classList.remove('copied');
+  }, 2000);
+}
+
+/* ── Share actions ── */
+function shareAction(platform) {
+  const messages = {
+    WhatsApp: 'Opening WhatsApp… 💬',
+    iMessage: 'Opening iMessage… 📨',
+    Email:    'Opening email… 📧',
+    More:     'Opening share sheet…'
+  };
+  showToast(messages[platform]);
+}
+
+/* ── Main share button ── */
+function doShare() {
+  const btn = document.getElementById('shareBtn');
+  btn.textContent = 'Sending… ✦';
+  btn.style.background = '#C4622D';
+  burst();
+  setTimeout(() => {
+    btn.textContent = 'Sent to the group ✓';
+    btn.style.background = '#4A6E58';
+    showToast('Your group has been notified 🎉');
+    setTimeout(() => {
+      btn.textContent = 'Share with the group →';
+      btn.style.background = '';
+    }, 2500);
+  }, 900);
+}
+
+/* ── Toast ── */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+/* ── Confetti burst ── */
+function burst() {
+  const colors = ['#C4622D','#E8A838','#5C8A6E','#F4C97A','#D4A0A0','#8DB89A','#4AACB0'];
+  const cx = 187, cy = window.innerHeight * 0.85;
+  for (let i = 0; i < 38; i++) {
+    const p = document.createElement('div');
+    p.className = 'cp';
+    const angle = (Math.random() * 360) * Math.PI / 180;
+    const dist  = 60 + Math.random() * 120;
+    p.style.cssText = `
+      background:${colors[i % colors.length]};
+      left:${cx + Math.cos(angle)*dist*(0.6+Math.random()*0.8)}px;
+      top:${cy + Math.sin(angle)*dist*0.5*(0.5+Math.random())}px;
+      width:${5+Math.random()*8}px;
+      height:${5+Math.random()*8}px;
+      border-radius:${Math.random()>0.45?'50%':'3px'};
+      animation-delay:${Math.random()*0.18}s;
+      animation-duration:${0.8+Math.random()*0.5}s;
+    `;
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 1400);
+  }
+}
+</script>
+</body>
+</html>

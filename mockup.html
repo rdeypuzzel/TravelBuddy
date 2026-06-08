@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1600, initial-scale=1.0">
+<title>TravelBuddy · Mockup Export</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Fraunces:wght@700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 40px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* Warm background texture */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 10%, rgba(196,98,45,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 90%, rgba(92,138,110,0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 60% 40%, rgba(232,168,56,0.06) 0%, transparent 55%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.layout {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 48px;
+  width: 100%;
+}
+
+/* Title block */
+.title-block {
+  text-align: center;
+}
+.title-wordmark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: 'Fraunces', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #C4622D;
+  margin-bottom: 10px;
+}
+.title-dot {
+  width: 28px; height: 28px;
+  background: #C4622D;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.title-sub {
+  font-size: 14px;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 0.3px;
+}
+
+/* Phones row */
+.phones {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 32px;
+  flex-wrap: nowrap;
+}
+
+/* Phone frame */
+.phone-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.phone-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.phone-frame {
+  position: relative;
+  width: 266px;
+  /* iPhone 15 Pro proportions: 393×852, scaled to ~266px wide */
+  height: 544px;
+  border-radius: 42px;
+  background: #0A0705;
+  box-shadow:
+    0 0 0 1.5px #2A2420,
+    0 0 0 3px #1A1210,
+    0 30px 80px rgba(0,0,0,0.55),
+    0 8px 24px rgba(0,0,0,0.4),
+    inset 0 0 0 1.5px rgba(255,255,255,0.06);
+  overflow: hidden;
+}
+
+/* Side buttons */
+.phone-frame::before {
+  content: '';
+  position: absolute;
+  left: -4px;
+  top: 100px;
+  width: 3px;
+  height: 32px;
+  background: #2A2420;
+  border-radius: 2px 0 0 2px;
+  box-shadow: 0 44px 0 #2A2420, 0 82px 0 #2A2420;
+}
+.phone-frame::after {
+  content: '';
+  position: absolute;
+  right: -4px;
+  top: 130px;
+  width: 3px;
+  height: 60px;
+  background: #2A2420;
+  border-radius: 0 2px 2px 0;
+}
+
+/* Screen bezel */
+.phone-screen {
+  position: absolute;
+  inset: 3px;
+  border-radius: 40px;
+  overflow: hidden;
+  background: #FAF7F2;
+}
+
+/* Dynamic island */
+.dynamic-island {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 88px;
+  height: 28px;
+  background: #0A0705;
+  border-radius: 20px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.di-camera {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: #1A1410;
+  border: 1.5px solid #2A2420;
+}
+.di-sensor {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #232322;
+}
+
+/* iframe embed */
+.phone-iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  /* Scale from 375px design to 260px display */
+  transform-origin: top left;
+  transform: scale(0.6933);
+  width: calc(100% / 0.6933);
+  height: calc(100% / 0.6933);
+  pointer-events: none;
+}
+
+/* Screen number badge */
+.screen-badge {
+  position: absolute;
+  bottom: 14px;
+  right: 16px;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.4);
+  z-index: 50;
+}
+
+/* Footer */
+.footer-note {
+  font-size: 12px;
+  color: rgba(255,255,255,0.2);
+  letter-spacing: 0.3px;
+  text-align: center;
+}
+
+/* ── Print / export styles ── */
+@media print {
+  body {
+    background: #1A1410;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  body::before { display: none; }
+  .export-bar { display: none !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <div class="title-block">
+    <div class="title-wordmark">
+      <div class="title-dot">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M7 1C4.24 1 2 3.24 2 6C2 9.5 7 13 7 13C7 13 12 9.5 12 6C12 3.24 9.76 1 7 1Z" fill="white" opacity="0.92"/>
+          <circle cx="7" cy="6" r="2" fill="#C4622D"/>
+        </svg>
+      </div>
+      TravelBuddy
+    </div>
+    <div class="title-sub">Product screens · Group trip planner</div>
+  </div>
+
+  <div class="phones">
+
+    <!-- Screen 1: Preference swipe -->
+    <div class="phone-wrap">
+      <div class="phone-frame">
+        <div class="phone-screen">
+          <div class="dynamic-island">
+            <div class="di-sensor"></div>
+            <div class="di-camera"></div>
+          </div>
+          <iframe class="phone-iframe" src="travelbuddy.html" scrolling="no" title="Screen 1"></iframe>
+        </div>
+        <div class="screen-badge">1</div>
+      </div>
+      <div class="phone-label">Preferences</div>
+    </div>
+
+    <!-- Screen 2: Itinerary -->
+    <div class="phone-wrap">
+      <div class="phone-frame">
+        <div class="phone-screen">
+          <div class="dynamic-island">
+            <div class="di-sensor"></div>
+            <div class="di-camera"></div>
+          </div>
+          <iframe class="phone-iframe" src="itinerary.html" scrolling="no" title="Screen 2"></iframe>
+        </div>
+        <div class="screen-badge">2</div>
+      </div>
+      <div class="phone-label">Itinerary</div>
+    </div>
+
+    <!-- Screen 3: Home -->
+    <div class="phone-wrap">
+      <div class="phone-frame">
+        <div class="phone-screen">
+          <div class="dynamic-island">
+            <div class="di-sensor"></div>
+            <div class="di-camera"></div>
+          </div>
+          <iframe class="phone-iframe" src="home.html" scrolling="no" title="Screen 3"></iframe>
+        </div>
+        <div class="screen-badge">3</div>
+      </div>
+      <div class="phone-label">Home</div>
+    </div>
+
+    <!-- Screen 4: Share -->
+    <div class="phone-wrap">
+      <div class="phone-frame">
+        <div class="phone-screen">
+          <div class="dynamic-island">
+            <div class="di-sensor"></div>
+            <div class="di-camera"></div>
+          </div>
+          <iframe class="phone-iframe" src="share.html" scrolling="no" title="Screen 4"></iframe>
+        </div>
+        <div class="screen-badge">4</div>
+      </div>
+      <div class="phone-label">Share</div>
+    </div>
+
+  </div>
+
+  <div class="footer-note">travelbuddy.io · Group trip planning, sorted in 10 minutes</div>
+
+</div>
+
+</body>
+</html>
