@@ -597,6 +597,78 @@ html, body {
 }
 
 /* ══════════════════════
+   SLIDE 8b — DIFFERENTIATORS
+══════════════════════ */
+#s8b { background: var(--light); }
+
+.s8b-inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 52px;
+}
+
+.s8b-header { text-align: center; }
+.s8b-headline {
+  font-family: 'Fraunces', serif;
+  font-size: 54px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.1;
+  margin-top: 10px;
+}
+.s8b-headline em { font-style: italic; color: var(--orange); }
+
+.s8b-cards {
+  display: flex;
+  gap: 28px;
+  width: 100%;
+  max-width: 960px;
+}
+
+.s8b-card {
+  flex: 1;
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.s8b-card-highlight {
+  background: var(--orange);
+  border-color: var(--orange);
+  box-shadow: 0 12px 40px rgba(196,98,45,0.25);
+}
+
+.s8b-icon {
+  font-size: 32px;
+  line-height: 1;
+}
+
+.s8b-card-title {
+  font-family: 'Fraunces', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+}
+.s8b-card-highlight .s8b-card-title { color: #fff; }
+
+.s8b-card-body {
+  font-size: 14px;
+  color: var(--ink2);
+  line-height: 1.6;
+}
+.s8b-card-highlight .s8b-card-body { color: rgba(255,255,255,0.85); }
+
+/* ══════════════════════
    SLIDE 11 — TEAM
 ══════════════════════ */
 #s11 {
@@ -630,32 +702,20 @@ html, body {
 }
 .s11-headline em { font-style: italic; color: var(--orange); }
 
-.s11-team {
+.s11-members {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
+  gap: 32px;
+  width: 100%;
+  max-width: 860px;
+  justify-content: center;
 }
-
-.s11-roles {
-  display: flex;
-  gap: 12px;
-}
-.s11-role-chip {
-  padding: 7px 18px;
-  border-radius: 99px;
-  border: 1.5px solid var(--border);
-  background: #fff;
-  font-size: 13px;
-  color: var(--ink2);
-}
-.s11-role-chip strong { color: var(--orange); font-weight: 700; }
 
 .s11-member {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.5s ease, transform 0.5s ease;
@@ -665,24 +725,65 @@ html, body {
 .slide.active .s11-member:nth-child(3) { opacity:1; transform:none; transition-delay:.4s; }
 
 .s11-member-center .s11-avatar {
-  width: 152px; height: 152px;
-  font-size: 56px;
+  width: 120px; height: 120px;
+  font-size: 46px;
   box-shadow: 0 16px 48px rgba(196,98,45,0.28);
 }
 
 .s11-avatar {
-  width: 128px; height: 128px;
+  width: 100px; height: 100px;
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   font-family: 'Fraunces', serif;
-  font-size: 46px;
+  font-size: 38px;
   font-weight: 700;
   color: #fff;
   flex-shrink: 0;
 }
-.s11-av-deni  { background: linear-gradient(135deg, #E8975A, #C4622D); }
-.s11-av-rosi  { background: linear-gradient(135deg, #C4622D, #8B3A1A); }
-.s11-av-bozho { background: linear-gradient(135deg, #E8A838, #C4622D); }
+.s11-av-1 { background: linear-gradient(135deg, #E8975A, #C4622D); }
+.s11-av-2 { background: linear-gradient(135deg, #C4622D, #8B3A1A); }
+.s11-av-3 { background: linear-gradient(135deg, #E8A838, #C4622D); }
+
+.s11-role-chip {
+  padding: 5px 16px;
+  border-radius: 99px;
+  border: 1.5px solid var(--border);
+  background: #fff;
+  font-size: 13px;
+  color: var(--ink2);
+}
+.s11-role-chip strong { color: var(--orange); font-weight: 700; }
+
+.s11-logos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+  padding: 10px 14px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  width: 100%;
+  min-height: 48px;
+}
+
+.s11-logo {
+  height: 22px;
+  width: auto;
+  object-fit: contain;
+  filter: grayscale(1) opacity(0.65);
+  transition: filter 0.2s;
+}
+.s11-logo:hover { filter: grayscale(0) opacity(1); }
+
+/* Per-logo size tuning — equalise visual weight */
+.s11-logo[alt="myPOS"]     { height: 24px; }
+.s11-logo[alt="ИУ Варна"]  { height: 38px; }
+.s11-logo[alt="Melon"]     { height: 22px; }
+.s11-logo[alt="Kin+Carta"] { height: 20px; }
+.s11-logo[alt="Puzzel"]    { height: 24px; }
 
 .s11-name {
   font-family: 'Fraunces', serif;
@@ -1507,8 +1608,8 @@ html, body {
 
         <!-- Headline -->
         <div class="s1-headline">
-          Твоят маршрут.<br>
-          Готов преди да си<br>
+          Твоето пътуване.<br>
+          Готово преди да си<br>
           <em>стегнал куфара.</em>
         </div>
 
@@ -1705,8 +1806,8 @@ html, body {
 
       <!-- Left text -->
       <div class="s4-left">
-        <div class="eyebrow">Продуктът</div>
-        <div class="s4-headline">Твоят план в<br><em>джоба ти</em></div>
+        <div class="eyebrow">Продуктът: Solo Trip</div>
+        <div class="s4-headline">Готовият план в<br><em>джоба ти</em></div>
         <div class="s4-sub">Опознаваме те като на игра. Swipe-ваш, а ние нареждаме останалото. </div>
       </div>
 
@@ -1779,7 +1880,7 @@ html, body {
 
       <!-- Left text -->
       <div class="s4-left">
-        <div class="eyebrow" style="color:var(--orange2);">Групово пътуване</div>
+        <div class="eyebrow" style="color:var(--orange2);">Продуктът: Group Trip</div>
         <div class="s4-headline">Различни хора.<br><em>Едно пътуване.</em></div>
         <div class="s4-sub">Край на безкрайните групови чатове.</div>
       </div>
@@ -1787,7 +1888,6 @@ html, body {
 
       <!-- Right: 2 phones -->
       <div class="s4-right">
-
         <div class="s4-phone">
           <div class="s4-phone-frame">
             <div class="s4-titlebar">
@@ -1983,7 +2083,7 @@ html, body {
           <!-- Group -->
           <div class="s7-card s7-group">
             <div class="s7-plan-name">Група</div>
-            <div class="s7-price">€40<span>/група</span></div>
+            <div class="s7-price">€40<span>/група (до 10 човека)</span></div>
             <ul class="s7-features">
               <li>Всичко от Pro</li>
               <li>Групово планиране</li>
@@ -2039,53 +2139,50 @@ html, body {
           <thead>
             <tr>
               <th class="s8-feat-col">Функция</th>
-              <th>Wanderlog</th>
-              <th>Layla AI</th>
-              <th>TripIt</th>
-              <th>Mindtrip</th>
-              <th>iPlan.ai</th>
+              <th>AI Агенти</th>
+              <th>Други приложения</th>
               <th class="s8-us-col">TravelBuddy</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td class="s8-feat-col">Интелигентен маршрут</td>
-              <td class="s8-partial">◐</td><td class="s8-yes">✓</td><td class="s8-no">—</td><td class="s8-yes">✓</td><td class="s8-yes">✓</td>
+              <td class="s8-partial">◐</td><td class="s8-yes">✓</td>
               <td class="s8-us-col s8-yes">✓</td>
             </tr>
             <tr>
               <td class="s8-feat-col">Планиране с приятели</td>
-              <td class="s8-yes">✓</td><td class="s8-no">—</td><td class="s8-partial">◐</td><td class="s8-no">—</td><td class="s8-no">—</td>
+              <td class="s8-no">—</td><td class="s8-partial">◐</td>
               <td class="s8-us-col s8-yes">✓</td>
             </tr>
             <tr>
               <td class="s8-feat-col">Откриване на общи интереси</td>
-              <td class="s8-no">—</td><td class="s8-partial">◐</td><td class="s8-no">—</td><td class="s8-no">—</td><td class="s8-no">—</td>
+              <td class="s8-no">—</td><td class="s8-no">—</td>
               <td class="s8-us-col s8-yes">✓</td>
             </tr>
             <tr>
               <td class="s8-feat-col">Автоматичен консенсус</td>
-              <td class="s8-no">—</td><td class="s8-no">—</td><td class="s8-no">—</td><td class="s8-no">—</td><td class="s8-no">—</td>
+              <td class="s8-no">—</td><td class="s8-no">—</td>
               <td class="s8-us-col s8-yes">✓</td>
             </tr>
             <tr>
               <td class="s8-feat-col">Препоръки според повода</td>
-              <td class="s8-no">—</td><td class="s8-partial">◐</td><td class="s8-no">—</td><td class="s8-no">—</td><td class="s8-no">—</td>
+              <td class="s8-partial">◐</td><td class="s8-no">—</td>
               <td class="s8-us-col s8-yes">✓</td>
             </tr>
             <tr>
               <td class="s8-feat-col">Партньорски резервации</td>
-              <td class="s8-partial">◐</td><td class="s8-yes">✓</td><td class="s8-yes">✓</td><td class="s8-no">—</td><td class="s8-no">—</td>
+              <td class="s8-no">—</td><td class="s8-yes">✓</td>
               <td class="s8-us-col s8-yes">✓</td>
             </tr>
             <tr>
               <td class="s8-feat-col">Оптимизирано за мобилни устройства</td>
-              <td class="s8-yes">✓</td><td class="s8-yes">✓</td><td class="s8-yes">✓</td><td class="s8-no">—</td><td class="s8-yes">✓</td>
+              <td class="s8-yes">✓</td><td class="s8-partial">◐</td>
               <td class="s8-us-col s8-yes">✓</td>
             </tr>
             <tr>
               <td class="s8-feat-col">Автентични преживявания</td>
-              <td class="s8-no">—</td><td class="s8-partial">◐</td><td class="s8-no">—</td><td class="s8-no">—</td><td class="s8-no">—</td>
+              <td class="s8-no">—</td><td class="s8-partial">◐</td>
               <td class="s8-us-col s8-yes">✓</td>
             </tr>
           </tbody>
@@ -2099,6 +2196,44 @@ html, body {
       </div>
 
     </div><!-- /s8 -->
+
+    <!-- ════════════════════════════
+         SLIDE 8b · DIFFERENTIATORS
+    ════════════════════════════ -->
+    <div class="slide" id="s8b">
+
+      <div class="s8b-inner">
+
+        <div class="s8b-header">
+          <div class="eyebrow" style="justify-content:center;">Нашето предимство</div>
+          <div class="s8b-headline">С какво се <em>открояваме?</em></div>
+        </div>
+
+        <div class="s8b-cards">
+
+          <div class="s8b-card">
+            <div class="s8b-icon">📡</div>
+            <div class="s8b-card-title">Проактивно събиране на данни</div>
+            <div class="s8b-card-body">Учим се от поведението на потребителя в реално време, без да чакаме той да попълни анкета.</div>
+          </div>
+
+          <div class="s8b-card">
+            <div class="s8b-icon">👥</div>
+            <div class="s8b-card-title">Създаден за споделяне</div>
+            <div class="s8b-card-body">Маршрутът се планира и синхронизира между цяла група. Всеки вижда, редактира и гласува в реално време.</div>
+          </div>
+
+          <div class="s8b-card s8b-card-highlight">
+            <div class="s8b-icon">⚡</div>
+            <div class="s8b-card-title">Пълен профил с един клик</div>
+            <div class="s8b-card-body">Импортирай историята си от Google Maps или Booking.com. TravelBuddy вече знае кой си.</div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div><!-- /s8b -->
 
     <!-- ════════════════════════════
          SLIDE 9 · GO-TO-MARKET
@@ -2153,7 +2288,7 @@ html, body {
             <div class="s9-phase-title">Органичен старт</div>
             <div class="s9-phase-divider"></div>
             <ul class="s9-phase-list">
-              <li>TikTok</li>
+              <li>TikTok/ Instagram</li>
               <li>Reddit</li>
               <li>Facebook групи</li>
             </ul>
@@ -2168,7 +2303,6 @@ html, body {
             <div class="s9-phase-title">Viral момент</div>
             <div class="s9-phase-divider"></div>
             <ul class="s9-phase-list">
-              <li>„What's your Travel DNA?" кампания</li>
               <li>Referral програма</li>
               <li>Micro influencers</li>
             </ul>
@@ -2184,7 +2318,6 @@ html, body {
             <div class="s9-phase-divider"></div>
             <ul class="s9-phase-list">
               <li>Туристиески платформи</li>
-              <li>Coworking пространства</li>
               <li>Организатори на събития</li>
             </ul>
           </div>
@@ -2247,12 +2380,10 @@ html, body {
             <!-- Milestone 1 -->
             <div class="s10-milestone" style="left:14%;">
               <div class="s10-card s10-card-top">
-                <div class="s10-tag">Q3 2025</div>
-                <div class="s10-m-title">Прототип</div>
+                <div class="s10-tag">Q3 2026</div>
+                <div class="s10-m-title">Готов прототип</div>
                 <ul class="s10-m-list">
-                  <li>AI preference matching</li>
-                  <li>Групов маршрут</li>
-                  <li>Споделяне на план</li>
+                  <li>Завършване на прототип</li>
                 </ul>
               </div>
               <div class="s10-node s10-node-done">
@@ -2268,12 +2399,10 @@ html, body {
               <div class="s10-stem"></div>
               <div class="s10-node s10-node-active">02</div>
               <div class="s10-card s10-card-bot">
-                <div class="s10-tag">Q4 2025</div>
-                <div class="s10-m-title">Валидиране</div>
+                <div class="s10-tag">Q4 2026</div>
+                <div class="s10-m-title">Валидиране на решението</div>
                 <ul class="s10-m-list">
-                  <li>20+ потребителски интервюта</li>
-                  <li>Preference flow тест</li>
-                  <li>Итерации по UX</li>
+                  <li>100+ потребителски интервюта</li>
                 </ul>
               </div>
             </div>
@@ -2281,11 +2410,11 @@ html, body {
             <!-- Milestone 3 -->
             <div class="s10-milestone" style="left:66%;">
               <div class="s10-card s10-card-top">
-                <div class="s10-tag">Q1 2026</div>
-                <div class="s10-m-title">Бета старт</div>
+                <div class="s10-tag">Q1 2027</div>
+                <div class="s10-m-title">MVP</div>
                 <ul class="s10-m-list">
                   <li>Публично пускане</li>
-                  <li>Първи 1 000 потребители</li>
+                  <li>Първи 1 000 потребителя</li>
                   <li>Referral програма</li>
                 </ul>
               </div>
@@ -2296,11 +2425,12 @@ html, body {
             <!-- Milestone 4 — horizon -->
             <div class="s10-milestone" style="left:88%;">
               <div class="s10-card s10-card-top s10-card-horizon">
-                <div class="s10-tag">2026+</div>
-                <div class="s10-m-title">Мащабиране</div>
+                <div class="s10-tag">2027+</div>
+                <div class="s10-m-title">Скалиране</div>
                 <ul class="s10-m-list">
                   <li>Booking интеграция</li>
                   <li>Pro монетизация</li>
+                  <li>Стъпване на европейски пазар</li>
                 </ul>
               </div>
               <div class="s10-node s10-node-horizon">→</div>
@@ -2357,14 +2487,40 @@ html, body {
           <div class="s11-headline">Хората зад <em>TravelBuddy</em></div>
         </div>
 
-        <div class="s11-team">
-          <img src="pics.png" alt="Екипът" style="height:360px;object-fit:contain;display:block;mix-blend-mode:multiply;filter:contrast(1.05);">
+        <div class="s11-members">
 
-          <div class="s11-roles">
-            <div class="s11-role-chip">Дени — <strong>Product</strong></div>
-            <div class="s11-role-chip">Роси — <strong>Development</strong></div>
-            <div class="s11-role-chip">Божо — <strong>Marketing</strong></div>
+          <!-- Деница -->
+          <div class="s11-member">
+            <div class="s11-avatar s11-av-1">Д</div>
+            <div class="s11-name">Деница</div>
+            <div class="s11-role-chip"><strong>CPO</strong> · Product</div>
+            <div class="s11-logos">
+              <img src="MyPOS_Logo.png" alt="myPOS" class="s11-logo">
+            </div>
           </div>
+
+          <!-- Росица -->
+          <div class="s11-member s11-member-center">
+            <div class="s11-avatar s11-av-2">Р</div>
+            <div class="s11-name">Росица</div>
+            <div class="s11-role-chip"><strong>CTO</strong> · Development</div>
+            <div class="s11-logos">
+              <img src="Melon_logo.png" alt="Melon" class="s11-logo">
+              <img src="kin+carta.png" alt="Kin+Carta" class="s11-logo">
+              <img src="puzzel_logo.png" alt="Puzzel" class="s11-logo">
+            </div>
+          </div>
+
+          <!-- Божидар -->
+          <div class="s11-member">
+            <div class="s11-avatar s11-av-3">Б</div>
+            <div class="s11-name">Божидар</div>
+            <div class="s11-role-chip"><strong>CMO</strong> · Marketing</div>
+            <div class="s11-logos">
+              <img src="iu_varna.png" alt="ИУ Варна" class="s11-logo">
+            </div>
+          </div>
+
         </div>
 
       </div>
@@ -2405,12 +2561,9 @@ html, body {
 
         <!-- Main tagline -->
         <div class="s12-headline">
-          Посети най-горещите<br>
-          точки —<br>
-          <em>без напечени<br>ситуации.</em>
+          Приятел, който<br>
+          <em>пътува <br>в джоба ти.</em>
         </div>
-
-        <div class="s12-sub">Твоят AI travel companion</div>
 
       </div>
 
