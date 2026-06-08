@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1600, initial-scale=1.0">
+<title>TravelBuddy · Desktop Mockup</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Fraunces:wght@700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #111;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 40px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 10%, rgba(196,98,45,0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 90%, rgba(92,138,110,0.08) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.layout {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 52px;
+  width: 100%;
+}
+
+/* Title block */
+.title-block { text-align: center; }
+.title-wordmark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: 'Fraunces', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #C4622D;
+  margin-bottom: 10px;
+}
+.title-dot {
+  width: 28px; height: 28px;
+  background: #C4622D;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.title-sub {
+  font-size: 14px;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 0.3px;
+}
+
+/* Windows row */
+.windows {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 36px;
+  flex-wrap: nowrap;
+}
+
+/* Single browser window wrapper */
+.window-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.window-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.32);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* ── Browser frame ── */
+.browser-frame {
+  position: relative;
+  width: 620px;
+  height: 460px;
+  border-radius: 10px;
+  background: #1C1916;
+  box-shadow:
+    0 0 0 1px #333,
+    0 32px 80px rgba(0,0,0,0.7),
+    0 8px 24px rgba(0,0,0,0.5),
+    inset 0 0 0 1px rgba(255,255,255,0.04);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+/* Title bar */
+.browser-titlebar {
+  height: 40px;
+  background: #252220;
+  border-bottom: 1px solid #333;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  gap: 12px;
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* Traffic lights */
+.traffic-lights {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-shrink: 0;
+}
+.tl {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+}
+.tl-red    { background: #FF5F57; box-shadow: inset 0 0 0 0.5px rgba(0,0,0,0.2); }
+.tl-yellow { background: #FEBC2E; box-shadow: inset 0 0 0 0.5px rgba(0,0,0,0.2); }
+.tl-green  { background: #28C840; box-shadow: inset 0 0 0 0.5px rgba(0,0,0,0.2); }
+
+/* URL bar */
+.browser-url {
+  flex: 1;
+  height: 26px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  gap: 7px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 0.2px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.url-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #28C840;
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+/* Content area */
+.browser-content {
+  flex: 1;
+  position: relative;
+  background: #FAF7F2;
+  overflow: hidden;
+}
+
+/* Desktop iframe — scaled to fit the frame */
+.browser-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: none;
+  transform-origin: top left;
+  /* 1280px design → 620px frame = scale 0.484 */
+  transform: scale(0.484);
+  width: calc(100% / 0.484);
+  height: calc(100% / 0.484);
+  pointer-events: none;
+}
+
+.footer-note {
+  font-size: 12px;
+  color: rgba(255,255,255,0.2);
+  letter-spacing: 0.3px;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <div class="title-block">
+    <div class="title-wordmark">
+      <div class="title-dot">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M7 1C4.24 1 2 3.24 2 6C2 9.5 7 13 7 13C7 13 12 9.5 12 6C12 3.24 9.76 1 7 1Z" fill="white" opacity="0.92"/>
+          <circle cx="7" cy="6" r="2" fill="#C4622D"/>
+        </svg>
+      </div>
+      TravelBuddy
+    </div>
+    <div class="title-sub">Product screens · Desktop view</div>
+  </div>
+
+  <div class="windows">
+
+    <!-- Screen 1: Preferences -->
+    <div class="window-wrap">
+      <div class="browser-frame">
+        <div class="browser-titlebar">
+          <div class="traffic-lights">
+            <div class="tl tl-red"></div>
+            <div class="tl tl-yellow"></div>
+            <div class="tl tl-green"></div>
+          </div>
+          <div class="browser-url">
+            <div class="url-dot"></div>
+            travelbuddy.io/preferences
+          </div>
+        </div>
+        <div class="browser-content">
+          <iframe class="browser-iframe" src="travelbuddy-desktop.html" scrolling="no" title="Preferences"></iframe>
+        </div>
+      </div>
+      <div class="window-label">Предпочитания</div>
+    </div>
+
+    <!-- Screen 2: Itinerary -->
+    <div class="window-wrap">
+      <div class="browser-frame">
+        <div class="browser-titlebar">
+          <div class="traffic-lights">
+            <div class="tl tl-red"></div>
+            <div class="tl tl-yellow"></div>
+            <div class="tl tl-green"></div>
+          </div>
+          <div class="browser-url">
+            <div class="url-dot"></div>
+            travelbuddy.io/itinerary
+          </div>
+        </div>
+        <div class="browser-content">
+          <iframe class="browser-iframe" src="itinerary-desktop.html" scrolling="no" title="Itinerary"></iframe>
+        </div>
+      </div>
+      <div class="window-label">Маршрут</div>
+    </div>
+
+  </div>
+
+  <!-- Row 2: Home + Share -->
+  <div class="windows">
+
+    <!-- Screen 3: Home -->
+    <div class="window-wrap">
+      <div class="browser-frame">
+        <div class="browser-titlebar">
+          <div class="traffic-lights">
+            <div class="tl tl-red"></div>
+            <div class="tl tl-yellow"></div>
+            <div class="tl tl-green"></div>
+          </div>
+          <div class="browser-url">
+            <div class="url-dot"></div>
+            travelbuddy.io/home
+          </div>
+        </div>
+        <div class="browser-content">
+          <iframe class="browser-iframe" src="home-desktop.html" scrolling="no" title="Home"></iframe>
+        </div>
+      </div>
+      <div class="window-label">Начало</div>
+    </div>
+
+    <!-- Screen 4: Share -->
+    <div class="window-wrap">
+      <div class="browser-frame">
+        <div class="browser-titlebar">
+          <div class="traffic-lights">
+            <div class="tl tl-red"></div>
+            <div class="tl tl-yellow"></div>
+            <div class="tl tl-green"></div>
+          </div>
+          <div class="browser-url">
+            <div class="url-dot"></div>
+            travelbuddy.io/share
+          </div>
+        </div>
+        <div class="browser-content">
+          <iframe class="browser-iframe" src="share-desktop.html" scrolling="no" title="Share"></iframe>
+        </div>
+      </div>
+      <div class="window-label">Сподели с групата</div>
+    </div>
+
+  </div>
+
+  <div class="footer-note">travelbuddy.io · AI trip planning, done in minutes</div>
+
+</div>
+
+</body>
+</html>

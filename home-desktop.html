@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280, initial-scale=1.0">
+<title>TravelBuddy · Home</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:     #FAF7F2;
+  --orange: #C4622D;
+  --orange-light: #E8975A;
+  --amber:  #E8A838;
+  --green:  #5C8A6E;
+  --ink:    #1A1A1A;
+  --muted:  #6B6B6B;
+  --border: #F0EDE8;
+  --chip-border: #E8E0D8;
+}
+
+html, body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  color: var(--ink);
+}
+
+/* ════════════════════════════
+   LAYOUT: hero left | content right
+════════════════════════════ */
+.app {
+  display: grid;
+  grid-template-columns: 1fr 520px;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ════════════════════════════
+   LEFT — HERO
+════════════════════════════ */
+.hero {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    175deg,
+    #3B1206 0%,
+    #6B2D0E 18%,
+    #A84A20 35%,
+    #C4622D 50%,
+    #D4845A 65%,
+    #C47E6A 78%,
+    #D4A070 88%,
+    #E8A838 100%
+  );
+}
+
+/* Grain */
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+  background-size: 180px;
+  mix-blend-mode: overlay;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Atmospheric glows */
+.hero-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Stars */
+.hero-stars {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 45%;
+  pointer-events: none;
+}
+
+/* City silhouette */
+.hero-city {
+  position: absolute;
+  bottom: 130px;
+  left: 0; right: 0;
+}
+
+/* Ground */
+.hero-ground {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 140px;
+  background: linear-gradient(to top, rgba(20,8,2,0.6), transparent);
+}
+
+/* Friends */
+.hero-friends {
+  position: absolute;
+  bottom: 52px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: flex-end;
+  gap: 0;
+}
+.friend {
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  border: 3px solid rgba(255,255,255,0.3);
+  margin-left: -14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.28);
+}
+.friend:first-child { margin-left: 0; }
+.friend:nth-child(1) { background: #8DB89A; transform: translateY(6px); }
+.friend:nth-child(2) { background: #D4A0A0; transform: translateY(-4px); }
+.friend:nth-child(3) { background: #D4C49A; transform: translateY(4px); }
+.friend:nth-child(4) { background: #C47A6A; transform: translateY(-6px); }
+
+.friend-shadow {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px; height: 18px;
+  background: radial-gradient(ellipse, rgba(0,0,0,0.3) 0%, transparent 70%);
+  filter: blur(4px);
+}
+
+/* Wordmark in hero */
+.hero-wordmark {
+  position: absolute;
+  top: 40px; left: 48px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-family: 'Fraunces', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.95);
+  letter-spacing: -0.2px;
+  z-index: 10;
+}
+.hero-wm-dot {
+  width: 28px; height: 28px;
+  background: rgba(255,255,255,0.2);
+  border: 1.5px solid rgba(255,255,255,0.4);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+/* Doodles in hero */
+.hero-doodles { position: absolute; inset: 0; pointer-events: none; z-index: 5; }
+
+/* Hero bottom caption */
+.hero-caption {
+  position: absolute;
+  bottom: 28px;
+  left: 0; right: 0;
+  text-align: center;
+  z-index: 10;
+  font-size: 13px;
+  color: rgba(255,255,255,0.45);
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+/* ════════════════════════════
+   RIGHT — CONTENT PANEL
+════════════════════════════ */
+.panel {
+  background: var(--bg);
+  border-left: 1.5px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  scrollbar-width: none;
+  padding: 52px 52px 40px;
+  position: relative;
+}
+.panel::-webkit-scrollbar { display: none; }
+
+/* Background doodles behind content */
+.panel-doodles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.panel-inner {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Headline */
+.headline {
+  font-family: 'Fraunces', serif;
+  font-size: 42px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.12;
+  letter-spacing: -1.4px;
+  margin-bottom: 14px;
+}
+.headline em {
+  font-style: italic;
+  color: var(--orange);
+}
+
+.subheadline {
+  font-size: 16px;
+  color: var(--muted);
+  line-height: 1.6;
+  font-weight: 400;
+  max-width: 380px;
+  margin-bottom: 24px;
+}
+
+/* Social proof */
+.social-proof {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+.proof-avatars { display: flex; }
+.proof-av {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  border: 2px solid var(--bg);
+  margin-left: -7px;
+  font-size: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
+}
+.proof-av:first-child { margin-left: 0; }
+.proof-text { font-size: 13px; color: var(--muted); }
+.proof-sep { color: #C9C0B6; font-size: 13px; }
+.proof-rating {
+  font-size: 13px;
+  color: var(--muted);
+  display: flex; align-items: center; gap: 4px;
+}
+.proof-star { color: var(--amber); }
+
+/* CTA */
+.btn-cta {
+  width: 100%;
+  height: 56px;
+  background: var(--orange);
+  color: #fff;
+  border: none;
+  border-radius: 99px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: -0.1px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(196,98,45,0.32), inset 0 1px 0 rgba(255,255,255,0.18), inset 0 -2px 0 rgba(0,0,0,0.12);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  margin-bottom: 10px;
+}
+.btn-cta:hover {
+  background: #B05225;
+  box-shadow: 0 6px 28px rgba(196,98,45,0.38), inset 0 1px 0 rgba(255,255,255,0.18), inset 0 -2px 0 rgba(0,0,0,0.12);
+}
+.btn-cta:active { transform: scale(0.975); }
+.btn-cta::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.14), transparent);
+  animation: shimmer 3.2s ease-in-out infinite;
+}
+@keyframes shimmer {
+  0%   { left: -70%; }
+  50%, 100% { left: 140%; }
+}
+.btn-sub {
+  text-align: center;
+  font-size: 12px;
+  color: #A8A09A;
+  margin-bottom: 26px;
+}
+
+/* Divider */
+.divider-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.divider-line { flex: 1; height: 1px; background: var(--border); }
+.divider-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #C9C0B6;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Occasion chips */
+.chips-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 16px;
+  border-radius: 99px;
+  border: 1.5px solid var(--chip-border);
+  background: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s, transform 0.12s;
+  white-space: nowrap;
+}
+.chip:hover { transform: translateY(-1px); }
+.chip.active {
+  border-color: var(--orange);
+  background: #FDF2EC;
+  color: var(--orange);
+}
+
+/* Feature rows */
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.feature-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.feature-icon {
+  width: 44px; height: 44px;
+  border-radius: 13px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.icon-orange { background: #FDF2EC; }
+.icon-green  { background: #EDF5F0; }
+.icon-amber  { background: #FEF7E8; }
+.feature-text { flex: 1; padding-top: 3px; }
+.feature-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+.feature-desc {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ══════════ LEFT HERO ══════════ -->
+  <div class="hero">
+
+    <!-- Atmospheric glows -->
+    <div class="hero-glow">
+      <svg width="100%" height="100%" viewBox="0 0 760 720" preserveAspectRatio="xMidYMid slice" fill="none">
+        <ellipse cx="380" cy="520" rx="280" ry="110" fill="rgba(232,168,56,0.26)"/>
+        <ellipse cx="380" cy="560" rx="200" ry="70" fill="rgba(232,168,56,0.2)"/>
+        <ellipse cx="520" cy="160" rx="180" ry="120" fill="rgba(196,98,45,0.14)"/>
+        <ellipse cx="160" cy="200" rx="140" ry="100" fill="rgba(107,45,14,0.18)"/>
+      </svg>
+    </div>
+
+    <!-- Stars -->
+    <div class="hero-stars">
+      <svg width="100%" height="100%" viewBox="0 0 760 324" preserveAspectRatio="xMidYMid slice" fill="none">
+        <g fill="rgba(255,255,255,0.7)">
+          <circle cx="80" cy="40" r="1.3"/><circle cx="170" cy="22" r="1"/><circle cx="280" cy="50" r="1.5"/>
+          <circle cx="380" cy="18" r="1.1"/><circle cx="480" cy="36" r="1.4"/><circle cx="580" cy="20" r="0.9"/>
+          <circle cx="680" cy="44" r="1.2"/><circle cx="130" cy="84" r="0.9"/><circle cx="250" cy="96" r="1.1"/>
+          <circle cx="450" cy="80" r="1"/><circle cx="620" cy="72" r="1.3"/><circle cx="56" cy="115" r="0.8"/>
+          <circle cx="400" cy="110" r="0.9"/><circle cx="700" cy="92" r="1"/>
+        </g>
+        <!-- Moon -->
+        <circle cx="620" cy="80" r="36" fill="rgba(255,235,200,0.16)"/>
+        <circle cx="630" cy="74" r="25" fill="rgba(70,30,10,0.52)"/>
+      </svg>
+    </div>
+
+    <!-- City silhouette -->
+    <div class="hero-city">
+      <svg width="100%" height="160" viewBox="0 0 760 160" preserveAspectRatio="xMidYMax meet" fill="none">
+        <g fill="rgba(40,14,4,0.42)">
+          <rect x="0" y="72" width="28" height="88"/><rect x="4" y="56" width="20" height="22"/><rect x="7" y="40" width="14" height="20"/><rect x="12" y="24" width="4" height="18"/>
+          <rect x="32" y="80" width="24" height="80"/><rect x="35" y="64" width="18" height="22"/>
+          <rect x="60" y="64" width="22" height="96"/><rect x="63" y="48" width="16" height="22"/><rect x="65" y="32" width="12" height="20"/>
+          <rect x="86" y="74" width="32" height="86"/><rect x="90" y="58" width="24" height="22"/>
+          <rect x="122" y="68" width="18" height="92"/><rect x="125" y="52" width="12" height="22"/><rect x="127" y="36" width="8" height="20"/>
+          <rect x="144" y="70" width="40" height="90"/><ellipse cx="164" cy="70" rx="20" ry="22"/><rect x="154" y="48" width="20" height="26"/><ellipse cx="164" cy="48" rx="10" ry="13"/><rect x="161" y="28" width="6" height="22"/>
+          <rect x="188" y="78" width="26" height="82"/><rect x="191" y="62" width="20" height="22"/>
+          <rect x="218" y="72" width="34" height="88"/><rect x="222" y="56" width="26" height="22"/><rect x="228" y="40" width="14" height="20"/><rect x="234" y="18" width="2" height="24"/>
+          <rect x="256" y="80" width="22" height="80"/><rect x="259" y="64" width="16" height="20"/>
+          <rect x="282" y="68" width="28" height="92"/><rect x="285" y="52" width="22" height="22"/>
+          <rect x="314" y="76" width="26" height="84"/><rect x="317" y="60" width="20" height="20"/>
+          <rect x="344" y="64" width="32" height="96"/><rect x="348" y="48" width="24" height="22"/><rect x="352" y="32" width="16" height="20"/>
+          <rect x="380" y="74" width="24" height="86"/><rect x="383" y="58" width="18" height="22"/>
+          <rect x="408" y="68" width="30" height="92"/><rect x="411" y="52" width="24" height="22"/><rect x="415" y="38" width="16" height="18"/>
+          <rect x="442" y="78" width="22" height="82"/><rect x="445" y="62" width="16" height="22"/>
+          <rect x="468" y="72" width="28" height="88"/><rect x="471" y="56" width="22" height="22"/>
+          <rect x="500" y="66" width="26" height="94"/><rect x="503" y="50" width="20" height="22"/>
+          <rect x="530" y="74" width="30" height="86"/><rect x="534" y="58" width="22" height="22"/><rect x="538" y="44" width="14" height="18"/>
+          <rect x="564" y="70" width="24" height="90"/><rect x="567" y="54" width="18" height="22"/>
+          <rect x="592" y="64" width="32" height="96"/><rect x="596" y="48" width="24" height="22"/><rect x="600" y="32" width="16" height="20"/>
+          <rect x="628" y="76" width="26" height="84"/><rect x="631" y="60" width="20" height="22"/>
+          <rect x="658" y="68" width="30" height="92"/><rect x="661" y="52" width="24" height="20"/>
+          <rect x="692" y="72" width="28" height="88"/><rect x="695" y="56" width="22" height="22"/>
+          <rect x="724" y="66" width="36" height="94"/><rect x="728" y="50" width="28" height="22"/>
+        </g>
+        <rect x="0" y="138" width="760" height="22" fill="rgba(20,6,1,0.4)"/>
+      </svg>
+    </div>
+
+    <!-- Doodles -->
+    <div class="hero-doodles">
+      <svg width="100%" height="100%" viewBox="0 0 760 720" preserveAspectRatio="xMidYMid slice" fill="none">
+        <path d="M60 480 Q160 280 340 220 Q520 160 680 240" stroke="rgba(255,255,255,0.12)" stroke-width="1.8" fill="none" stroke-dasharray="6 10" stroke-linecap="round"/>
+        <g fill="rgba(255,255,255,0.38)" transform="translate(666,232) rotate(12)">
+          <path d="M0 7 L20 3 L22 7 L12 9 L13 15 L8 13 L7 17 L5 13 L0 7Z"/>
+        </g>
+        <g stroke="rgba(255,255,255,0.3)" stroke-width="1.4" stroke-linecap="round">
+          <line x1="560" y1="48" x2="560" y2="56"/><line x1="556" y1="52" x2="564" y2="52"/>
+          <line x1="557.2" y1="49.2" x2="562.8" y2="54.8"/><line x1="562.8" y1="49.2" x2="557.2" y2="54.8"/>
+        </g>
+        <path d="M180 480 Q240 470 300 480 Q360 490 420 480 Q480 470 540 480" stroke="rgba(255,255,255,0.08)" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <!-- Friend avatars -->
+    <div class="friend-shadow"></div>
+    <div class="hero-friends">
+      <div class="friend">🧡</div>
+      <div class="friend">💚</div>
+      <div class="friend">💛</div>
+      <div class="friend">🌸</div>
+    </div>
+
+    <!-- Wordmark -->
+    <div class="hero-wordmark">
+      <div class="hero-wm-dot">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+          <path d="M6.5 0.5C4.0 0.5 2 2.5 2 5C2 8.2 6.5 12 6.5 12C6.5 12 11 8.2 11 5C11 2.5 9.0 0.5 6.5 0.5Z" fill="white" opacity="0.9"/>
+          <circle cx="6.5" cy="5" r="2" fill="rgba(196,98,45,0.8)"/>
+        </svg>
+      </div>
+      TravelBuddy
+    </div>
+
+    <!-- Caption -->
+    <div class="hero-caption">Your group, ready for anything.</div>
+
+  </div><!-- /hero -->
+
+  <!-- ══════════ RIGHT PANEL ══════════ -->
+  <div class="panel">
+
+    <!-- Subtle doodles -->
+    <div class="panel-doodles">
+      <svg width="520" height="720" viewBox="0 0 520 720" fill="none">
+        <g opacity="0.08" stroke="#C4622D" stroke-width="1.3" stroke-linecap="round">
+          <line x1="480" y1="120" x2="480" y2="128"/><line x1="476" y1="124" x2="484" y2="124"/>
+          <line x1="477.2" y1="121.2" x2="482.8" y2="126.8"/><line x1="482.8" y1="121.2" x2="477.2" y2="126.8"/>
+        </g>
+        <g opacity="0.07" stroke="#5C8A6E" stroke-width="1.3" fill="none" stroke-linecap="round">
+          <path d="M32 620 Q24 606 36 601 Q48 596 46 610 Q44 624 32 620Z"/>
+          <line x1="32" y1="620" x2="42" y2="606"/>
+        </g>
+        <path d="M490 380 Q498 394 490 408 Q482 422 490 436" stroke="#C4622D" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.07"/>
+        <circle cx="498" cy="540" r="2.5" fill="#C4622D" opacity="0.07"/>
+        <circle cx="488" cy="558" r="1.8" fill="#C4622D" opacity="0.05"/>
+      </svg>
+    </div>
+
+    <div class="panel-inner">
+
+      <!-- Headline -->
+      <div class="headline">
+        Your group trip,<br><em>sorted</em> in 10 minutes.
+      </div>
+      <div class="subheadline">
+        Everyone picks their preferences. TravelBuddy builds a plan you'll all agree on — no group chat chaos.
+      </div>
+
+      <!-- Social proof -->
+      <div class="social-proof">
+        <div class="proof-avatars">
+          <div class="proof-av" style="background:#8DB89A;">A</div>
+          <div class="proof-av" style="background:#D4A0A0;">J</div>
+          <div class="proof-av" style="background:#C47A6A;">K</div>
+        </div>
+        <span class="proof-text">400+ organisers planning right now</span>
+        <span class="proof-sep">·</span>
+        <span class="proof-rating"><span class="proof-star">★</span> 4.9 from early users</span>
+      </div>
+
+      <!-- CTA -->
+      <button class="btn-cta" onclick="ctaClick(this)">
+        Plan my group trip →
+      </button>
+      <div class="btn-sub">Free to start · No account needed</div>
+
+      <!-- Divider -->
+      <div class="divider-row">
+        <div class="divider-line"></div>
+        <div class="divider-label">Perfect for</div>
+        <div class="divider-line"></div>
+      </div>
+
+      <!-- Chips -->
+      <div class="chips-grid">
+        <div class="chip active" onclick="chipClick(this)">🥂 Hen do</div>
+        <div class="chip" onclick="chipClick(this)">🎂 Birthday trip</div>
+        <div class="chip" onclick="chipClick(this)">👨‍👩‍👧 Family holiday</div>
+        <div class="chip" onclick="chipClick(this)">👯 Friends weekend</div>
+        <div class="chip" onclick="chipClick(this)">💼 Team offsite</div>
+      </div>
+
+      <!-- Features -->
+      <div class="features">
+        <div class="feature-row">
+          <div class="feature-icon icon-orange">📋</div>
+          <div class="feature-text">
+            <div class="feature-title">Everyone has a say</div>
+            <div class="feature-desc">Each person fills in their own preferences — takes 2 minutes</div>
+          </div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-icon icon-green">🤖</div>
+          <div class="feature-text">
+            <div class="feature-title">AI resolves the conflicts</div>
+            <div class="feature-desc">One plan that actually works for the whole group</div>
+          </div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-icon icon-amber">🔗</div>
+          <div class="feature-text">
+            <div class="feature-title">Share and book in minutes</div>
+            <div class="feature-desc">One link. Everyone sees the plan. Done.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /panel -->
+
+</div><!-- /app -->
+
+<script>
+function chipClick(el) {
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+function ctaClick(btn) {
+  const orig = btn.innerHTML;
+  btn.innerHTML = 'Starting your trip ✦';
+  btn.style.background = '#5C8A6E';
+  btn.style.boxShadow = '0 4px 18px rgba(92,138,110,0.35), inset 0 1px 0 rgba(255,255,255,0.18), inset 0 -2px 0 rgba(0,0,0,0.12)';
+  setTimeout(() => { btn.innerHTML = orig; btn.style.background = ''; btn.style.boxShadow = ''; }, 1800);
+}
+</script>
+</body>
+</html>

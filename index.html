@@ -430,7 +430,7 @@ html, body {
   padding: 40px 0;
 }
 
-/* Phone frame (dark, adapted from mockup.html) */
+/* Browser / desktop window frame for s4 */
 .s4-phone {
   display: flex;
   flex-direction: column;
@@ -444,64 +444,74 @@ html, body {
   letter-spacing: 1.4px;
   text-transform: uppercase;
 }
+/* Browser window — landscape 16:9 */
 .s4-phone-frame {
   position: relative;
-  width: 248px;
-  height: 508px;
-  border-radius: 40px;
-  background: #0A0705;
+  width: 360px;
+  height: 240px;
+  border-radius: 8px;
+  background: #1E1B18;
   box-shadow:
-    0 0 0 1.5px #2A2420,
-    0 0 0 3px #1A1210,
-    0 24px 64px rgba(0,0,0,0.6),
-    inset 0 0 0 1.5px rgba(255,255,255,0.06);
+    0 0 0 1px #3A3530,
+    0 16px 48px rgba(0,0,0,0.7),
+    inset 0 0 0 1px rgba(255,255,255,0.05);
   overflow: hidden;
   flex-shrink: 0;
 }
-.s4-phone-frame::before {
-  content: '';
+/* Title bar */
+.s4-titlebar {
   position: absolute;
-  left: -4px; top: 94px;
-  width: 3px; height: 30px;
-  background: #2A2420;
-  border-radius: 2px 0 0 2px;
-  box-shadow: 0 41px 0 #2A2420, 0 76px 0 #2A2420;
+  top: 0; left: 0; right: 0;
+  height: 28px;
+  background: #2A2520;
+  border-bottom: 1px solid #3A3530;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  gap: 8px;
+  z-index: 10;
 }
-.s4-phone-frame::after {
-  content: '';
-  position: absolute;
-  right: -4px; top: 120px;
-  width: 3px; height: 56px;
-  background: #2A2420;
-  border-radius: 0 2px 2px 0;
+/* Traffic lights */
+.s4-tl {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
+.s4-tl-r { background: #FF5F57; }
+.s4-tl-y { background: #FEBC2E; }
+.s4-tl-g { background: #28C840; }
+/* URL bar */
+.s4-browser-bar {
+  flex: 1;
+  height: 18px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 4px;
+  border: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  font-size: 8.5px;
+  color: rgba(255,255,255,0.28);
+  font-family: 'DM Sans', sans-serif;
+  overflow: hidden;
+  white-space: nowrap;
+}
+/* Content area */
 .s4-phone-screen {
   position: absolute;
-  inset: 3px;
-  border-radius: 38px;
+  top: 28px; left: 0; right: 0; bottom: 0;
   overflow: hidden;
   background: #FAF7F2;
 }
-.s4-dynamic-island {
-  position: absolute;
-  top: 11px; left: 50%;
-  transform: translateX(-50%);
-  width: 82px; height: 26px;
-  background: #0A0705;
-  border-radius: 18px;
-  z-index: 100;
-  display: flex; align-items: center; justify-content: center; gap: 7px;
-}
-.s4-di-camera { width: 9px; height: 9px; border-radius: 50%; background: #1A1410; border: 1.5px solid #2A2420; }
-.s4-di-sensor  { width: 5px; height: 5px; border-radius: 50%; background: #232322; }
 .s4-phone-iframe {
   position: absolute;
-  inset: 0;
+  top: 0; left: 0;
   border: none;
   transform-origin: top left;
-  transform: scale(0.6453);
-  width: calc(100% / 0.6453);
-  height: calc(100% / 0.6453);
+  /* 1280px design → 360px frame = scale 0.28125 */
+  transform: scale(0.28125);
+  width: 1280px;
+  height: 720px;
   pointer-events: none;
 }
 
@@ -1704,12 +1714,14 @@ html, body {
 
         <div class="s4-phone">
           <div class="s4-phone-frame">
+            <div class="s4-titlebar">
+              <div class="s4-tl s4-tl-r"></div>
+              <div class="s4-tl s4-tl-y"></div>
+              <div class="s4-tl s4-tl-g"></div>
+              <div class="s4-browser-bar">travelbuddy.io/preferences</div>
+            </div>
             <div class="s4-phone-screen">
-              <div class="s4-dynamic-island">
-                <div class="s4-di-sensor"></div>
-                <div class="s4-di-camera"></div>
-              </div>
-              <iframe class="s4-phone-iframe" src="travelbuddy.html" scrolling="no" title="Preferences"></iframe>
+              <iframe class="s4-phone-iframe" src="travelbuddy-desktop.html" scrolling="no" title="Preferences"></iframe>
             </div>
           </div>
           <div class="s4-phone-label">Предпочитания</div>
@@ -1717,12 +1729,14 @@ html, body {
 
         <div class="s4-phone">
           <div class="s4-phone-frame">
+            <div class="s4-titlebar">
+              <div class="s4-tl s4-tl-r"></div>
+              <div class="s4-tl s4-tl-y"></div>
+              <div class="s4-tl s4-tl-g"></div>
+              <div class="s4-browser-bar">travelbuddy.io/itinerary</div>
+            </div>
             <div class="s4-phone-screen">
-              <div class="s4-dynamic-island">
-                <div class="s4-di-sensor"></div>
-                <div class="s4-di-camera"></div>
-              </div>
-              <iframe class="s4-phone-iframe" src="itinerary.html" scrolling="no" title="Itinerary"></iframe>
+              <iframe class="s4-phone-iframe" src="itinerary-desktop.html" scrolling="no" title="Itinerary"></iframe>
             </div>
           </div>
           <div class="s4-phone-label">Маршрут</div>
@@ -1774,12 +1788,14 @@ html, body {
 
         <div class="s4-phone">
           <div class="s4-phone-frame">
+            <div class="s4-titlebar">
+              <div class="s4-tl s4-tl-r"></div>
+              <div class="s4-tl s4-tl-y"></div>
+              <div class="s4-tl s4-tl-g"></div>
+              <div class="s4-browser-bar">travelbuddy.io/home</div>
+            </div>
             <div class="s4-phone-screen">
-              <div class="s4-dynamic-island">
-                <div class="s4-di-sensor"></div>
-                <div class="s4-di-camera"></div>
-              </div>
-              <iframe class="s4-phone-iframe" src="home.html" scrolling="no" title="Home"></iframe>
+              <iframe class="s4-phone-iframe" src="home-desktop.html" scrolling="no" title="Home"></iframe>
             </div>
           </div>
           <div class="s4-phone-label">Създай събитието</div>
@@ -1787,12 +1803,14 @@ html, body {
 
         <div class="s4-phone">
           <div class="s4-phone-frame">
+            <div class="s4-titlebar">
+              <div class="s4-tl s4-tl-r"></div>
+              <div class="s4-tl s4-tl-y"></div>
+              <div class="s4-tl s4-tl-g"></div>
+              <div class="s4-browser-bar">travelbuddy.io/share</div>
+            </div>
             <div class="s4-phone-screen">
-              <div class="s4-dynamic-island">
-                <div class="s4-di-sensor"></div>
-                <div class="s4-di-camera"></div>
-              </div>
-              <iframe class="s4-phone-iframe" src="share.html" scrolling="no" title="Share"></iframe>
+              <iframe class="s4-phone-iframe" src="share-desktop.html" scrolling="no" title="Share"></iframe>
             </div>
           </div>
           <div class="s4-phone-label">Сподели с групата</div>
